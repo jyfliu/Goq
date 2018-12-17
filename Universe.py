@@ -18,6 +18,7 @@ import Knowledge
 import Point
 import Theorem
 
+
 class Universe(object):
 
     def __init__(self) -> None:
