@@ -94,7 +94,6 @@ class Universe(object):
         print("I'd rather do something and regret it than regret doing nothing at all.")
 
 
-
 def get_debug() -> int:
     """
     0 - no debug
