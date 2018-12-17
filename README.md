@@ -16,7 +16,7 @@ TODO: IMO 2018 P6 + solution + show how computer could solve it
 
 In comparison, the other disciplines are much more ad hoc in nature, which makes their problems much harder to solve with computerized technology. Let's look at problem 3 (combinatorics) of the same year.
 
-This problem requires the observations that ... etc.
+This problem requires several observations that are difficult to formalize and make with machine-assisted technology.
 
 ## How it works.
 
