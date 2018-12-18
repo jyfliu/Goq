@@ -1,12 +1,10 @@
 from functools import reduce
-
-
-# prioritizes bound points, if both are unbound prioritizes the second, if both are bound throws exception
 from typing import Dict
 
 from Point import Point
 
 
+# prioritizes bound points, if both are unbound prioritizes the second, if both are bound throws exception
 def merge(first: Dict[Point, Point], second: Dict[Point, Point]) -> Dict[Point, Point]:
     ret = {}
     for k, v in first.items():

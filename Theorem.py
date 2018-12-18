@@ -1,5 +1,4 @@
-from typing import Set, Any, List, Dict
-from itertools import product
+from typing import List, Dict
 
 import Hypothesis
 import Point
@@ -29,6 +28,15 @@ class Theorem(object):
 
     def apply(self, universe: "Universe") -> List["Hypothesis"]:
         return self.try_apply(identity_point_map(self.points), self.results, self.hypotheses, universe)
+
+    def __str__(self) -> str:
+        return "".join((self.name, ": ", self.results, " <-| ", self.hypotheses))
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+    def __hash__(self):
+        return hash(self.__str__())
 
 
 def bind(points: Dict["Point", "Point"], results: List["Hypothesis"]) -> List["Hypothesis"]:

@@ -1,9 +1,5 @@
-from typing import TYPE_CHECKING, List
-
-
 import Hypothesis
 import Knowledge
-import Point
 import Theorem
 
 
@@ -46,17 +42,17 @@ class Universe(object):
         self.knowledge.insert(hypothesis)
         return hypothesis
 
-    def pose_many(self, *args):
+    def pose_many(self, *args) -> None:
         for hypo in args:
             self.pose(hypo)
 
-    def print_solved_goals(self, hypothesis: Hypothesis):
+    def print_solved_goals(self, hypothesis: Hypothesis) -> None:
         for goal in self.goals:
             if goal == hypothesis:
                 print("Solved ", goal)
                 print("TODO: Print hypo stack trace")
 
-    def print_knowledge(self):
+    def print_knowledge(self) -> None:
         self.knowledge.print_hypotheses()
 
     def step(self) -> None:
@@ -68,12 +64,12 @@ class Universe(object):
         # If I'm not going to catch a fish, I might as well not catch a big fish.
         # ?????????????
 
-    def run_til_heat_death(self):
+    def run_til_heat_death(self) -> None:
         for _ in range(self.heat_death):
             if get_debug() == 2:
                 self.print_knowledge()
             if get_debug() >= 1:
-                print("Step %d"%_)
+                print("Step %d" % _)
             self.step()
         if get_debug() == 2:
             self.print_knowledge()
