@@ -2,7 +2,7 @@
 
 DEMO COMING SOON (sorry!)
 
-Goq is an automatic theorem prover capable of solving complex Olympiad style geometry problems. The solver itself was written in Python, while the interface/website was written in Java with the help of Spring Boot, Thymeleaf, HTML, etc. The theorem database was written in MySQL.
+Goq is an automatic theorem prover capable of solving complex Olympiad style geometry problems. The solver itself was written in Python, while the interface/website was written in Java with the help of Spring Boot, Thymeleaf, HTML, etc. The theorem database was written in Hibernate, MySQL, JPA.
 
 ## Inspiration
 

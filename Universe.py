@@ -1,18 +1,6 @@
 from typing import TYPE_CHECKING, List
 
-# todo
-# finish Hypothesis creation DONE
-# finish update_map() DONE
-# finish generate_axioms()
-# add a stack trace for hypotheses
-# finish step() for applying theorems DONE
-# finish step() for creating constructions
-# add a database for theorems
-# add a database for problems
-# add a lookup of previous solved problems as new theorems
-#
-# not urgent todo:
-# add a better update_map_sep and maybe an update_map_pair in the flavour of update_map_eight in Hypothesis
+
 import Hypothesis
 import Knowledge
 import Point
