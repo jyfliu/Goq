@@ -16,7 +16,7 @@ TODO: IMO 2018 P6 + solution + show how computer could solve it
 
 In comparison, the other disciplines are much more ad hoc in nature, which makes their problems much harder to solve with computerized technology. Let's look at problem 3 (combinatorics) of the same year.
 
-This problem requires several observations that are difficult to formalize and make with machine-assisted technology.
+This problem requires several observations that are difficult to formalize and make with machine-assisted technology...
 
 ## How it works.
 
@@ -34,7 +34,7 @@ Symbolic math is also getting to the point where I'd consider it good enough to 
 
 ## FAQ:
 #### Why is it called Goq?
-Goq is a portmanteau between geometry and coq. Coq is a computerized proof assistant with a functional programming language, formal logic and type theory. Now Coq, unlike Goq, is not an automatic theorem prover. Coq is a proof *assistant*. Still, I chose the name because it kind of sounds funny.
+Goq is a portmanteau between geometry and coq. Coq is a computerized proof assistant with a functional programming language and formal logic. Now Coq, unlike Goq, is not an automatic theorem prover. Coq is a proof *assistant*. Still, I chose the name because it kind of sounds funny.
 
 #### Why did you use Java/Spring instead of Django/some thing Python?
 I wanted to learn Spring.
