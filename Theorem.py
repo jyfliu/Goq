@@ -7,17 +7,19 @@ import Universe
 
 class Theorem(object):
 
-    def __init__(self, points: int, results: List["Hypothesis"], hypotheses: List["Hypothesis"], *, name: str="<?T?>"):
+    def __init__(self, points: int, results: List["Hypothesis"], hypotheses: List["Hypothesis"], *, name: str="<?T?>", source: str="God"):
         self.points = points
         self.results = results
         self.hypotheses = hypotheses
         self.name = name
+        self.source = source
 
     def try_apply(self, points: Dict["Point", "Point"], results: List["Hypothesis"],
                   hypotheses: List["Hypothesis"], sources: List["Hypothesis"],
                   universe: "Universe") -> List[Tuple["Hypothesis", Tuple["Hypothesis"]]]:
         if not hypotheses:
-            return list({(x, (self.name,)+tuple(bind(points, sources))) for x in bind(points, results)})
+            return list({(x, (" ".join((self.name, "<-|",self.source)),)
+                          + tuple(bind(points, sources))) for x in bind(points, results)})
         hypotheses = bind(points, hypotheses)
         hypo = hypotheses[0]
         ret = []
