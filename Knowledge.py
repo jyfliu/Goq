@@ -20,7 +20,9 @@ class Knowledge(object):
         :param hypothesis:
         :return: all hypotheses with the same prefix
         """
-        return self.type[hypothesis.prefix]
+        if hypothesis.prefix in self.type:
+            return self.type[hypothesis.prefix]
+        return []
 
     def insert(self, hypothesis: Hypothesis, sources: List[Any]=None) -> None:
         if hypothesis in self.hash:
@@ -42,15 +44,18 @@ class Knowledge(object):
         if isinstance(hypothesis, str):
             print(hypothesis)
             return
-        print("" if first else " "*depth, "" if first else "| ", hypothesis, " <-| ", sep="", end="")
+        print("" if first else " "*(depth-2), "" if first else "| ", hypothesis, " ", left_implies(), " ", sep="", end="")
         if self.hash[hypothesis][0] == "God":
             print("God")
             return
         for s in self.hash[hypothesis]:
-            self.print_stack_trace(s, depth+3+len(hypothesis.__str__()), first)
+            self.print_stack_trace(s, depth+5+len(hypothesis.__str__()), first)
             first = False
 
     def print_hypotheses(self):
         for v in self.type.values():
             for h in v:
                 print(">> ", h, sep="")
+
+def left_implies() -> str:
+    return "<-|"
