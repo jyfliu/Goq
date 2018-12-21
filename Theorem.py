@@ -3,6 +3,7 @@ from typing import List, Dict, Tuple
 import Hypothesis
 import Point
 import Universe
+from Knowledge import left_implies
 
 
 class Theorem(object):
@@ -18,7 +19,7 @@ class Theorem(object):
                   hypotheses: List["Hypothesis"], sources: List["Hypothesis"],
                   universe: "Universe") -> List[Tuple["Hypothesis", Tuple["Hypothesis"]]]:
         if not hypotheses:
-            return list({(x, (" ".join((self.name, "<-|",self.source)),)
+            return list({(x, (" ".join((self.name, left_implies(),self.source)),)
                           + tuple(bind(points, sources))) for x in bind(points, results)})
         hypotheses = bind(points, hypotheses)
         hypo = hypotheses[0]
@@ -33,7 +34,7 @@ class Theorem(object):
         return self.try_apply(identity_point_map(self.points), self.results, self.hypotheses, [], universe)
 
     def __str__(self) -> str:
-        return "".join((self.name, ": ", self.results, " <-| ", self.hypotheses))
+        return "".join((self.name, ": ", str(self.results), " <-| ", str(self.hypotheses)))
 
     def __repr__(self) -> str:
         return self.__str__()

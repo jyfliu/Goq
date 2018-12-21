@@ -42,7 +42,8 @@ class Hypothesis(object):
                          prefix=self.prefix,
                          value=self.value,
                          valid=self.valid,
-                         equal=self.equal)
+                         equal=self.equal,
+                         update_map=self.update_map)
         return ret
 
     def ent_list(self):
