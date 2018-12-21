@@ -8,9 +8,9 @@ Goq is an automatic theorem prover capable of solving complex Olympiad style geo
 
 Olympiad geometry is usually the most hated discipline by high school students. And for good reason, too. Synthetic geometry requires an exceptional amount of preparation work, and more analytical "bash" techniques are frowned upon due to their ugly and time consuming nature.
 
-Enter the computer: an emotionless machine who exceps at ugly and time consuming bashes, and who's databases can store (for our purposes) near limitless theorems and their applications.
+Enter the computer: an emotionless machine who excels at ugly and time consuming bashes, and who's databases can store (for our purposes) near limitless theorems and their applications.
 
-It may seem difficult formalizing geometry problems into a computer-legible interface, but after this hurdle it is actually quite simple for a computer to actually solve the problem. This is because geometry proofs are very mechanical in nature -- they don't require much creativity. The vast majority of geometry problems, even at the Olympiad level, can be solved in the following manner: Construct these templates, apply these 7 theorems in this order, these points lie in the following configuration of which we know this property about, etc.
+It may seem difficult formalizing geometry problems into a computer-legible form, but after this hurdle it is actually quite simple for a computer to actually solve the problem. This is because geometry proofs are very mechanical in nature -- they don't require much creativity. The vast majority of geometry problems, even at the Olympiad level, can be solved in the following manner: Construct these templates, apply these 7 theorems in this order, these points lie in the following configuration of which we know this property about, etc.
 
 TODO: IMO 2018 P6 + solution + show how computer could solve it
 
