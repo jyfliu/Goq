@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Tuple
 
 import Hypothesis
 import Point
@@ -14,20 +14,21 @@ class Theorem(object):
         self.name = name
 
     def try_apply(self, points: Dict["Point", "Point"], results: List["Hypothesis"],
-                  hypotheses: List["Hypothesis"], universe: "Universe") -> List["Hypothesis"]:
+                  hypotheses: List["Hypothesis"], sources: List["Hypothesis"],
+                  universe: "Universe") -> List[Tuple["Hypothesis", Tuple["Hypothesis"]]]:
         if not hypotheses:
-            return list(set(bind(points, results)))
+            return list({(x, (self.name,)+tuple(bind(points, sources))) for x in bind(points, results)})
         hypotheses = bind(points, hypotheses)
         hypo = hypotheses[0]
         ret = []
         for u in universe.knowledge.get_all_of(hypo):
             if match(hypo, u):
                 for cur_map in Hypothesis.update_map(points, hypo, u):
-                    ret += self.try_apply(cur_map, results, hypotheses[1:], universe)
+                    ret += self.try_apply(cur_map, results, hypotheses[1:], sources+[hypo], universe)
         return list(set(ret))
 
-    def apply(self, universe: "Universe") -> List["Hypothesis"]:
-        return self.try_apply(identity_point_map(self.points), self.results, self.hypotheses, universe)
+    def apply(self, universe: "Universe") -> List[Tuple["Hypothesis", Tuple["Hypothesis"]]]:
+        return self.try_apply(identity_point_map(self.points), self.results, self.hypotheses, [], universe)
 
     def __str__(self) -> str:
         return "".join((self.name, ": ", self.results, " <-| ", self.hypotheses))

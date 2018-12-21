@@ -5,8 +5,6 @@ from typing import List, Callable, Dict, Set
 from Entities import Entities, match_sets, create_entities
 from Point import Point
 from Universe import get_debug
-import copy
-
 from util import merge
 
 
@@ -60,6 +58,8 @@ class Hypothesis(object):
         :param other:
         :return:
         """
+        if not isinstance(other, Hypothesis):
+            return False
         if not self.valid(self) or not other.valid(other): # they must consider themselves valid
             return False
         return self.equal(self, other)

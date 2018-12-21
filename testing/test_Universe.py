@@ -18,6 +18,10 @@ def test_step():
                   Hypothesis.parallel(A, G, C, F),
                   Hypothesis.collinear(G, F, B))
     bob.run_til_heat_death()
+    assert len(bob.knowledge.hypotheses)==4
+    assert bob.knowledge.contains(Hypothesis.midpoint(G,F,B))
+    bob.knowledge.print_stack_trace(Hypothesis.midpoint(G,F,B))
+    print("Test complete")
 
 
 if __name__ == '__main__':

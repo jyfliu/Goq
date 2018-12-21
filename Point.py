@@ -20,7 +20,7 @@ class Point(object):
     def __str__(self) -> str:
         return self.name
 
-    def __repr__(self) -> str :
+    def __repr__(self) -> str:
         return self.name
 
     def __eq__(self, other):

@@ -34,23 +34,31 @@ class Universe(object):
 
     # add hypothesis to universe
     def pose(self, hypothesis: Hypothesis) -> Hypothesis:
-        for p in hypothesis.all_entities():
-            assert p.bound(), "Knowledge must only contain bound entities"
-        if hypothesis in self.goals:
-            self.print_solved_goals(hypothesis)
-            self.goals = [h for h in self.goals if h != hypothesis]
-        self.knowledge.insert(hypothesis)
+        self.derive(hypothesis, [])
         return hypothesis
 
     def pose_many(self, *args) -> None:
         for hypo in args:
             self.pose(hypo)
 
+    def derive(self, hypothesis: Hypothesis, sources):
+        for p in hypothesis.all_entities():
+            assert p.bound(), "Knowledge must only contain bound entities"
+        if hypothesis in self.goals:
+            self.print_solved_goals(hypothesis)
+            self.goals = [h for h in self.goals if h != hypothesis]
+        self.knowledge.insert(hypothesis, sources)
+        return hypothesis
+
+    def derive_many(self, list_of_hypos):
+        for hypo, sources in list_of_hypos:
+            self.derive(hypo, sources)
+
     def print_solved_goals(self, hypothesis: Hypothesis) -> None:
         for goal in self.goals:
             if goal == hypothesis:
                 print("Solved ", goal)
-                print("TODO: Print hypo stack trace")
+                self.knowledge.print_stack_trace(hypothesis)
 
     def print_knowledge(self) -> None:
         self.knowledge.print_hypotheses()
@@ -59,7 +67,7 @@ class Universe(object):
         # apply theorems
         for theorem in self.theorems:
             returned = theorem.apply(self)
-            self.pose_many(*returned)
+            self.derive_many(returned)
         # add a construction database (somehow ??? )
         # If I'm not going to catch a fish, I might as well not catch a big fish.
         # ?????????????
