@@ -65,7 +65,7 @@ class Hypothesis(object):
         return self.equal(self, other)
 
     def __hash__(self) -> int:
-        return hash(self.__str__())
+        return hash("".join((self.prefix, self.value, str(sorted(self.all_entities(), key=lambda x: x.__str__())))))
 
     def __repr__(self):
         return self.__str__()
