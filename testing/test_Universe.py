@@ -13,12 +13,15 @@ def test_step():
                                Hypothesis.parallel(_D, _E, _B, _C),
                                Hypothesis.collinear(_E, _A, _C)],
                               name="Theorem Joe"))
+    bob.admit(Theorem.Theorem(6, [Hypothesis.parallel(_A, _B, _C, _D)],
+                              [Hypothesis.equal_angles(_A, _B, _E, _F, _C, _D, _E, _F)],
+                              name="Theorem Dan"))
     A, B, C, D, E, F, G, H = [Point.Point(chr(ord('A')+i)) for i in range(8)]
     bob.pose_many(Hypothesis.midpoint(A, B, C),
-                  Hypothesis.parallel(A, G, C, F),
+                  Hypothesis.equal_angles(B, H, G, A, H, B, C, F),
                   Hypothesis.collinear(G, F, B))
     bob.run_til_heat_death()
-    assert len(bob.knowledge.hypotheses)==4
+    assert len(bob.knowledge.hypotheses) == 5
     assert bob.knowledge.contains(Hypothesis.midpoint(G,F,B))
     bob.knowledge.print_stack_trace(Hypothesis.midpoint(G,F,B))
     print("Test complete")
