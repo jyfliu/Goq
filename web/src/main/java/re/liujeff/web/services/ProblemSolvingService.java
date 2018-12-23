@@ -9,7 +9,7 @@ import java.util.List;
 public interface ProblemSolvingService {
 
     void addTheorem(Theorem theorem);
-    Proof getSolution(List<Hypothesis> constraints, List<Hypothesis> goals);
+    Proof getSolution(List<Hypothesis> goals, List<Hypothesis> constraints);
 
     default void initialize(List<Theorem> theorems) {
         theorems.forEach(this::addTheorem);

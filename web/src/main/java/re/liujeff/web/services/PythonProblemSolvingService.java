@@ -30,7 +30,7 @@ public class PythonProblemSolvingService implements ProblemSolvingService {
     }
 
     @Override
-    public Proof getSolution(List<Hypothesis> constraints, List<Hypothesis> goals) {
+    public Proof getSolution(List<Hypothesis> goals, List<Hypothesis> constraints) {
         StringBuilder sb = new StringBuilder();
 
         String fs = System.getProperty("file.separator");
