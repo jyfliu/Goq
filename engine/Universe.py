@@ -44,10 +44,10 @@ class Universe(object):
     def derive(self, hypothesis: Hypothesis, sources):
         for p in hypothesis.all_entities():
             assert p.bound(), "Knowledge must only contain bound entities"
+        self.knowledge.insert(hypothesis, sources)
         if hypothesis in self.goals:
             self.print_solved_goals(hypothesis)
             self.goals = [h for h in self.goals if h != hypothesis]
-        self.knowledge.insert(hypothesis, sources)
         return hypothesis
 
     def derive_many(self, list_of_hypos):

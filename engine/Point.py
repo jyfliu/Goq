@@ -2,6 +2,8 @@
 class Point(object):
 
     def __init__(self, name="<?P?>"):
+        if name.startswith("_"):
+            name = "<"+name+"_>"
         self.name = name
 
     def bind(self, points):
