@@ -10,10 +10,9 @@ import Universe
 # python get_solution.py <number of theorems> [theorems]
 #                        <number of goals> [goals]
 #                        <number of constraints> [constraints]
-#                        <source of theorem>
 #
 # theorems are formatted as follows (hypotheses are separated by '+' here)
-# name#num_results#result1#...#result n#num_hypotheses#hypo1#...#hypo n
+# name#num_results#result1#...#result n#num_hypotheses#hypo1#...#hypo n#source
 #
 # hypotheses are formatted as follows
 # prefix#point1#...#point_n#value (leave value string blank if no value exists, but do not forget the final #)
@@ -23,9 +22,8 @@ num_goals = int(sys.argv[2+num_theorems])
 goals = [x.split("#") for x in sys.argv[3+num_theorems:3+num_theorems+num_goals]]
 num_constraints = int(sys.argv[3+num_theorems+num_goals])
 constraints = [x.split("#") for x in sys.argv[4+num_theorems+num_goals:4+num_theorems+num_constraints+num_goals]]
-source = sys.argv[4+num_theorems+num_constraints+num_goals]
 
-parsed_theorems = [Theorem.parse_from_string(theorem, source) for theorem in theorems]
+parsed_theorems = [Theorem.parse_from_string(theorem) for theorem in theorems]
 parsed_goals = [Hypothesis.parse_from_string(goal) for goal in goals]
 parsed_constraints = [Hypothesis.parse_from_string(constraint) for constraint in constraints]
 

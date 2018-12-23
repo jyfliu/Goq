@@ -45,12 +45,13 @@ class Theorem(object):
         return hash(self.__str__())
 
 
-def parse_from_string(theorem: List[str], source: str="Parser") -> Theorem:
+def parse_from_string(theorem: List[str]) -> Theorem:
     name = theorem[0]
     num_results = int(theorem[1])
     results = theorem[2:2+num_results]
     num_hypotheses = int(theorem[2+num_results])
     hypotheses = theorem[3+num_results:3+num_results+num_hypotheses]
+    source = theorem[3+num_hypotheses+num_results]
 
     parsed_results = [Hypothesis.parse_from_string(result.split("+")) for result in results]
     parsed_hypotheses = [Hypothesis.parse_from_string(hypothesis.split("+")) for hypothesis in hypotheses]
