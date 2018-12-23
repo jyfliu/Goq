@@ -1,9 +1,10 @@
 import os
 import sys
 
-import Hypothesis
-import Theorem
-import Universe
+sys.path.append(os.path.abspath(os.path.join('..')))
+sys.path.append(os.path.abspath(os.path.join('..', 'logic')))
+
+from logic import Theorem, Universe, Hypothesis, util
 
 # parse input
 # this can definitely be done a lot cleaner lol
@@ -51,11 +52,11 @@ for constraint in parsed_constraints:
     universe.pose(constraint)
 
 
-old_debug = Universe._debug
-Universe._debug = -1
+old_debug = util._debug
+util._debug = -1
 universe.run_til_heat_death()
 
 for goal in parsed_goals:
     universe.knowledge.print_stack_trace(goal)
 
-Universe._debug = old_debug # not really necessary oh well
+util._debug = old_debug # not really necessary oh well

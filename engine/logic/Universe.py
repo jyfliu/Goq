@@ -1,6 +1,5 @@
-import Hypothesis
-import Knowledge
-import Theorem
+from logic import Knowledge, Theorem, Hypothesis
+from logic.util import get_debug
 
 
 class Universe(object):
@@ -56,12 +55,13 @@ class Universe(object):
 
     def print_solved_goals(self, hypothesis: Hypothesis) -> None:
         for goal in self.goals:
-            if goal == hypothesis:
+            if goal == hypothesis and get_debug() >= 0:
                 print("Solved ", goal)
                 self.knowledge.print_stack_trace(hypothesis)
 
     def print_knowledge(self) -> None:
-        self.knowledge.print_hypotheses()
+        if get_debug() >= 0:
+            self.knowledge.print_hypotheses()
 
     def step(self) -> None:
         # apply theorems
@@ -85,16 +85,3 @@ class Universe(object):
 
     def why(self) -> None:
         print("I'd rather do something and regret it than regret doing nothing at all.")
-
-
-_debug = 2
-
-def get_debug() -> int:
-    """
-    -1 = dead silence
-    0 = no debug
-    1 = short debug
-    2 = long debug
-    :return:
-    """
-    return _debug

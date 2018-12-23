@@ -2,10 +2,9 @@ from functools import reduce
 from itertools import permutations, product
 from typing import List, Callable, Dict, Set
 
-from Entities import Entities, match_sets, create_entities
-from Point import Point
-from Universe import get_debug
-from util import merge
+from logic.Entities import Entities, match_sets, create_entities
+from logic.Point import Point
+from logic.util import merge, get_debug
 
 
 class Hypothesis(object):

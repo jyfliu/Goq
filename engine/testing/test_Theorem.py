@@ -1,7 +1,5 @@
-import Theorem
-import Hypothesis
-import Point
-from Hypothesis import update_map
+from logic import Theorem, Hypothesis, Point
+from logic.Hypothesis import update_map
 
 _A = Point.unbound_point(0)
 _B = Point.unbound_point(1)
