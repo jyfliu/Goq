@@ -7,6 +7,8 @@ import java.util.List;
 @Value
 public class Hypothesis implements Pythonable {
 
+    private final Long id;
+
     private final String prefix;
     private final List<String> entities;
     private final String value;

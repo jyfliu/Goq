@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 @Value
 public class Theorem implements Pythonable {
 
+    private final Long id;
+
     private final List<Hypothesis> results;
     private final List<Hypothesis> hypotheses;
     private final String name;
