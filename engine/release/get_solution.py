@@ -56,7 +56,8 @@ old_debug = util._debug
 util._debug = -1
 universe.run_til_heat_death()
 
-for goal in parsed_goals:
-    universe.knowledge.print_stack_trace(goal)
+with open("proof.txt", "w") as sys.stdout:
+    for goal in parsed_goals:
+        universe.knowledge.print_stack_trace(goal)
 
 util._debug = old_debug # not really necessary oh well
