@@ -42,7 +42,7 @@ public class GetSolutionTest {
 
         ProblemSolvingService solver = new PythonProblemSolvingService();
         solver.initialize(theorems);
-        solver.getSolution(Collections.singletonList(hypo3), Arrays.asList(hypo0, hypo1, hypo2));
+        System.out.println(solver.getSolution(Collections.singletonList(hypo3), Arrays.asList(hypo0, hypo1, hypo2)).getProof());
     }
 
 }

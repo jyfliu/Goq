@@ -47,7 +47,8 @@ public class PythonProblemSolvingService implements ProblemSolvingService {
         }
         StringBuilder result = new StringBuilder();
         try {
-            Process process = Runtime.getRuntime().exec("python " + path+" temp.txt");
+//            System.out.println("cmd.exe /c start python " + path+" temp.txt");
+            Process process = Runtime.getRuntime().exec("cmd.exe /c start python " + path+" temp.txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String s = null;
             while ((s = reader.readLine()) != null) {

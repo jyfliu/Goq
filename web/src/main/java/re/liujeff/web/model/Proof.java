@@ -7,4 +7,5 @@ public class Proof {
 
     private final String proof;
 
+
 }
