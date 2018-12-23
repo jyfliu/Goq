@@ -81,10 +81,11 @@ class Hypothesis(object):
 def parse_from_string(hypothesis: List[str]) -> Hypothesis:
     prefix, *args, value = hypothesis
     points = [Point(name) for name in args]
-    if value == "":
-        return locals()[prefix](*points)
+    if value.strip() == "":
+        return globals()[prefix](*points)
     else:
-        return locals()[prefix](*points, value)
+        return globals()[prefix](*points, value)
+
 
 def valid(hypo: Hypothesis) -> bool:
     return hypo.valid(hypo)
@@ -240,7 +241,7 @@ def parallel(A: Point, B: Point, C: Point, D: Point) -> Hypothesis:
 
 
 def para(A: Point, B: Point, C: Point, D: Point) -> Hypothesis:
-    return para(A, B, C, D)
+    return parallel(A, B, C, D)
 
 
 def perpendicular(A: Point, B: Point, C: Point, D: Point) -> Hypothesis:

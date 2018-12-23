@@ -23,10 +23,12 @@ import Universe
 #
 # hypotheses are formatted as follows
 # prefix#point1#...#point_n#value (leave value string blank if no value exists, but do not forget the final #)
-
-with open(os.path.join(sys.argv[1]), 'r') as f:
-    data = f.readlines()
-
+if len(sys.argv) > 1:
+    with open(os.path.join(sys.argv[1]), 'r') as f:
+        data = f.readlines()
+else:
+    with open(os.path.join("temp.txt"), 'r') as f:
+        data = f.readlines()
 
 num_theorems = int(data[0])
 theorems = [x.split("#") for x in data[1:1+num_theorems]]
@@ -41,11 +43,11 @@ parsed_constraints = [Hypothesis.parse_from_string(constraint) for constraint in
 
 
 universe = Universe.Universe()
-for theorem in theorems:
+for theorem in parsed_theorems:
     universe.admit(theorem)
-for goal in goals:
+for goal in parsed_goals:
     universe.claim(goal)
-for constraint in constraints:
+for constraint in parsed_constraints:
     universe.pose(constraint)
 
 
