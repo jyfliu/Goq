@@ -1,8 +1,10 @@
 import os
 import sys
 
-sys.path.append(os.path.abspath(os.path.join('..')))
-sys.path.append(os.path.abspath(os.path.join('..', 'logic')))
+abs_path = os.path.abspath(os.path.dirname(__file__))
+sys.path.append(os.path.abspath(os.path.join(abs_path, '..')))
+sys.path.append(os.path.abspath(os.path.join(abs_path, '..', 'logic')))
+
 
 from logic import Theorem, Universe, Hypothesis, util
 
@@ -24,12 +26,9 @@ from logic import Theorem, Universe, Hypothesis, util
 #
 # hypotheses are formatted as follows
 # prefix#point1#...#point_n#value (leave value string blank if no value exists, but do not forget the final #)
-if len(sys.argv) > 1:
-    with open(os.path.join(sys.argv[1]), 'r') as f:
-        data = f.readlines()
-else:
-    with open(os.path.join("temp.txt"), 'r') as f:
-        data = f.readlines()
+
+with open(os.path.join(abs_path, sys.argv[1]), 'r') as f:
+    data = f.readlines()
 
 num_theorems = int(data[0])
 theorems = [x.split("#") for x in data[1:1+num_theorems]]
@@ -56,7 +55,7 @@ old_debug = util._debug
 util._debug = -1
 universe.run_til_heat_death()
 
-with open("proof.txt", "w") as sys.stdout:
+with open(os.path.join(abs_path, "proof.txt"), "w") as sys.stdout:
     for goal in parsed_goals:
         universe.knowledge.print_stack_trace(goal)
 

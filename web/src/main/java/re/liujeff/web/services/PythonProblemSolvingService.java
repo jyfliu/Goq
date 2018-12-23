@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PythonProblemSolvingService implements ProblemSolvingService {
@@ -34,27 +35,29 @@ public class PythonProblemSolvingService implements ProblemSolvingService {
         StringBuilder sb = new StringBuilder();
 
         String fs = System.getProperty("file.separator");
-        String path = ".." + fs + "engine"+fs+"release"+fs+"get_solution.py";
+        String path = ".." + fs + "engine"+fs+"release"+fs;
 
         appendln(theorems, sb);
         appendln(goals, sb);
         appendln(constraints, sb);
         try {
-            Path file = Paths.get(".." + fs + "engine" + fs + "release" + fs + "temp.txt");
+            Path file = Paths.get(path+ "temp.txt");
             Files.write(file, Collections.singleton(sb.toString()), Charset.forName("UTF-8"));
         } catch(IOException ioe) {
             ioe.printStackTrace();
         }
         StringBuilder result = new StringBuilder();
         try {
-//            System.out.println("cmd.exe /c start python " + path+" temp.txt");
-            Process process = Runtime.getRuntime().exec("cmd.exe /c start python " + path+" temp.txt");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String s = null;
-            while ((s = reader.readLine()) != null) {
-                result.append(s).append("\n");
-            }
-        } catch(IOException ioe) {
+//            System.out.println("py " + path +"get_solution.py temp.txt");
+            Process process = Runtime.getRuntime().exec("py " + path +"get_solution.py temp.txt");
+            process.waitFor();
+//            System.out.println(process.exitValue());
+//            System.out.println(new BufferedReader(new InputStreamReader(process.getInputStream()))
+//                    .lines().collect(Collectors.joining("\n")));
+//            System.out.println(new BufferedReader(new InputStreamReader(process.getErrorStream()))
+//                    .lines().collect(Collectors.joining("\n")));
+            Files.lines(Paths.get(path + "proof.txt")).forEach(x->result.append(x).append("\n"));
+        } catch(IOException | InterruptedException ioe) {
             ioe.printStackTrace();
         }
         return new Proof(result.toString());
