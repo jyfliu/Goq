@@ -72,6 +72,7 @@ class Universe(object):
         # If I'm not going to catch a fish, I might as well not catch a big fish.
         # ?????????????
 
+    # run until it no longer runs
     def run_til_heat_death(self) -> None:
         for _ in range(self.heat_death):
             if get_debug() == 2:
@@ -86,11 +87,14 @@ class Universe(object):
         print("I'd rather do something and regret it than regret doing nothing at all.")
 
 
+_debug = 2
+
 def get_debug() -> int:
     """
-    0 - no debug
-    1 - short debug
-    2 - long debug
+    -1 = dead silence
+    0 = no debug
+    1 = short debug
+    2 = long debug
     :return:
     """
-    return 2
+    return _debug

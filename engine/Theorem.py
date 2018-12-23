@@ -1,3 +1,4 @@
+from functools import reduce
 from typing import List, Dict, Tuple
 
 import Hypothesis
@@ -8,7 +9,8 @@ from Knowledge import left_implies
 
 class Theorem(object):
 
-    def __init__(self, points: int, results: List["Hypothesis"], hypotheses: List["Hypothesis"], *, name: str="<?T?>", source: str="God"):
+    def __init__(self, points: int, results: List["Hypothesis"], hypotheses: List["Hypothesis"], *,
+                 name: str="<?T?>", source: str="God"):
         self.points = points
         self.results = results
         self.hypotheses = hypotheses
@@ -41,6 +43,21 @@ class Theorem(object):
 
     def __hash__(self):
         return hash(self.__str__())
+
+
+def parse_from_string(theorem: List[str], source: str="Parser") -> Theorem:
+    name = theorem[0]
+    num_results = int(theorem[1])
+    results = theorem[2:2+num_results]
+    num_hypotheses = int(theorem[2+num_results])
+    hypotheses = theorem[3+num_results:3+num_results+num_hypotheses]
+
+    parsed_results = [Hypothesis.parse_from_string(result.split("+")) for result in results]
+    parsed_hypotheses = [Hypothesis.parse_from_string(hypothesis.split("+")) for hypothesis in hypotheses]
+
+    points = reduce(lambda x, y: x|y, [set(r.all_entities()) for r in parsed_results + parsed_hypotheses], set())
+
+    return Theorem(len(points), parsed_results, parsed_hypotheses, name=name, source=source)
 
 
 def bind(points: Dict["Point", "Point"], results: List["Hypothesis"]) -> List["Hypothesis"]:

@@ -78,6 +78,14 @@ class Hypothesis(object):
             return ''.join((self.prefix, '(', str(self.entities), ')'))
 
 
+def parse_from_string(hypothesis: List[str]) -> Hypothesis:
+    prefix, *args, value = hypothesis
+    points = [Point(name) for name in args]
+    if value == "":
+        return locals()[prefix](*points)
+    else:
+        return locals()[prefix](*points, value)
+
 def valid(hypo: Hypothesis) -> bool:
     return hypo.valid(hypo)
 
@@ -223,16 +231,32 @@ def collinear(A: Point, B: Point, C: Point) -> Hypothesis:
     return Hypothesis(create_entities(({A, B, C},)), prefix="coll", valid=check([3]))
 
 
+def coll(A: Point, B: Point, C: Point) -> Hypothesis:
+    return collinear(A, B, C)
+
+
 def parallel(A: Point, B: Point, C: Point, D: Point) -> Hypothesis:
     return Hypothesis(create_entities(({A, B}, {C, D})), prefix="para", equal=equal_pair, valid=check([2, 2]))
+
+
+def para(A: Point, B: Point, C: Point, D: Point) -> Hypothesis:
+    return para(A, B, C, D)
 
 
 def perpendicular(A: Point, B: Point, C: Point, D: Point) -> Hypothesis:
     return Hypothesis(create_entities(({A, B}, {C, D})), prefix="perp", equal=equal_pair, valid=check([2, 2]))
 
 
+def perp(A: Point, B: Point, C: Point, D: Point):
+    return perpendicular(A, B, C, D)
+
+
 def midpoint(M: Point, A: Point, B: Point):
     return Hypothesis(create_entities(({M}, {A, B})), prefix="midp", valid=check([1, 2], [(0, 1)]))
+
+
+def midp(M: Point, A: Point, B: Point):
+    return midpoint(M, A, B)
 
 
 def circle(O: Point, A: Point, B: Point, C: Point):
@@ -243,9 +267,16 @@ def congruent(A: Point, B: Point, C: Point, D: Point): # AB cong CD
     return Hypothesis(create_entities(({A, B}, {C, D})), prefix="cong", equal=equal_pair, valid=check([2, 2]))
 
 
+def cong(A: Point, B: Point, C: Point, D: Point):
+    return congruent(A, B, C, D)
+
+
 def concyclic(A: Point, B: Point, C: Point, D: Point):
     return Hypothesis(create_entities(({A, B, C, D},)), prefix="cyclic", valid=check([4]))
 
+
+def cyclic(A: Point, B: Point, C: Point, D: Point):
+    return concyclic(A, B, C, D)
 
     # 0/1 = 2/3
     # 0/2 = 1/3
@@ -334,6 +365,10 @@ def equal_angles(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point, G: 
                       update_map=update_map_eight)
 
 
+def eqangle(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point, G: Point, H: Point):
+    return equal_angles(A, B, C, D, E, F, G, H)
+
+
 def equal_ratios(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point, G: Point, H: Point):
     return Hypothesis(create_entities(({A, B}, {C, D}, {E, F}, {G, H})),
                       prefix="eqratio",
@@ -342,9 +377,21 @@ def equal_ratios(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point, G: 
                       update_map=update_map_eight)
 
 
+def eqratio(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point, G: Point, H: Point):
+    return eqratio(A, B, C, D, E, F, G, H)
+
+
 def similar_triangles(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
     return Hypothesis(create_entities(({A, B, C}, {D, E, F})), prefix="simtri", equal=equal_pair, valid=check([3, 3]))
 
 
+def simtri(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
+    return similar_triangles(A, B, C, D, E, F)
+
+
 def congruent_triangles(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
     return Hypothesis(create_entities(({A, B, C}, {D, E, F})), prefix="contri", equal=equal_pair, valid=check([3, 3]))
+
+
+def contri(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
+    return congruent_triangles(A, B, C, D, E, F)
