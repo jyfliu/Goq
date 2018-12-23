@@ -1,5 +1,6 @@
 package re.liujeff.web.services;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import re.liujeff.web.model.Hypothesis;
 import re.liujeff.web.model.Proof;
@@ -14,9 +15,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@Primary
 public class PythonProblemSolvingService implements ProblemSolvingService {
 
     private List<Theorem> theorems;
@@ -48,14 +49,8 @@ public class PythonProblemSolvingService implements ProblemSolvingService {
         }
         StringBuilder result = new StringBuilder();
         try {
-//            System.out.println("py " + path +"get_solution.py temp.txt");
             Process process = Runtime.getRuntime().exec("py " + path +"get_solution.py temp.txt");
             process.waitFor();
-//            System.out.println(process.exitValue());
-//            System.out.println(new BufferedReader(new InputStreamReader(process.getInputStream()))
-//                    .lines().collect(Collectors.joining("\n")));
-//            System.out.println(new BufferedReader(new InputStreamReader(process.getErrorStream()))
-//                    .lines().collect(Collectors.joining("\n")));
             Files.lines(Paths.get(path + "proof.txt")).forEach(x->result.append(x).append("\n"));
         } catch(IOException | InterruptedException ioe) {
             ioe.printStackTrace();
