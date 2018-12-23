@@ -1,6 +1,6 @@
 from typing import Any, List, Dict
 
-import Hypothesis
+from logic import Hypothesis
 
 
 class Knowledge(object):

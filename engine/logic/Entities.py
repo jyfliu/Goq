@@ -1,8 +1,8 @@
-from typing import Dict, Tuple, Set
 from functools import reduce
 from itertools import permutations
+from typing import Dict, Tuple, Set
 
-from Point import Point
+from logic.Point import Point
 
 
 class Entities(object):

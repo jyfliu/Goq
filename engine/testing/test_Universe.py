@@ -1,7 +1,5 @@
-import Hypothesis
-import Point
-import Theorem
-from Universe import Universe
+from logic import Theorem, Hypothesis, Point
+from logic.Universe import Universe
 
 
 def test_step():

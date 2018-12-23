@@ -1,15 +1,13 @@
 from functools import reduce
 from typing import List, Dict, Tuple
 
-import Hypothesis
-import Point
-import Universe
-from Knowledge import left_implies
+from logic import Hypothesis, Point
+from logic.Knowledge import left_implies
 
 
 class Theorem(object):
 
-    def __init__(self, points: int, results: List["Hypothesis"], hypotheses: List["Hypothesis"], *,
+    def __init__(self, points: int, results: List, hypotheses: List, *,
                  name: str="<?T?>", source: str="God"):
         self.points = points
         self.results = results
@@ -17,9 +15,9 @@ class Theorem(object):
         self.name = name
         self.source = source
 
-    def try_apply(self, points: Dict["Point", "Point"], results: List["Hypothesis"],
-                  hypotheses: List["Hypothesis"], sources: List["Hypothesis"],
-                  universe: "Universe") -> List[Tuple["Hypothesis", Tuple["Hypothesis"]]]:
+    def try_apply(self, points: Dict, results: List,
+                  hypotheses: List, sources: List,
+                  universe) -> List[Tuple["Hypothesis", Tuple["Hypothesis"]]]:
         if not hypotheses:
             return list({(x, (" ".join((self.name, left_implies(),self.source)),)
                           + tuple(bind(points, sources))) for x in bind(points, results)})
@@ -32,7 +30,7 @@ class Theorem(object):
                     ret += self.try_apply(cur_map, results, hypotheses[1:], sources+[hypo], universe)
         return list(set(ret))
 
-    def apply(self, universe: "Universe") -> List[Tuple["Hypothesis", Tuple["Hypothesis"]]]:
+    def apply(self, universe) -> List[Tuple["Hypothesis", Tuple["Hypothesis"]]]:
         return self.try_apply(identity_point_map(self.points), self.results, self.hypotheses, [], universe)
 
     def __str__(self) -> str:
@@ -61,15 +59,15 @@ def parse_from_string(theorem: List[str]) -> Theorem:
     return Theorem(len(points), parsed_results, parsed_hypotheses, name=name, source=source)
 
 
-def bind(points: Dict["Point", "Point"], results: List["Hypothesis"]) -> List["Hypothesis"]:
+def bind(points: Dict, results: List["Hypothesis"]) -> List["Hypothesis"]:
     return [res.bind(points) for res in results]
 
 
-def match(first: "Hypothesis", second: "Hypothesis") -> bool:
+def match(first, second) -> bool:
     return first == second
 
 
-def identity_point_map(size: int) -> Dict["Point", "Point"]:
+def identity_point_map(size: int) -> Dict:
     points = {} # initially points is the identity map
     for i in range(size):
         points[Point.unbound_point(i)] = Point.unbound_point(i)
