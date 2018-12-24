@@ -1,19 +1,36 @@
 package re.liujeff.web.model;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 public class Theorem implements Pythonable {
 
-    private final Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private final List<Hypothesis> results;
-    private final List<Hypothesis> hypotheses;
-    private final String name;
-    private final String source;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Hypothesis> results;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Hypothesis> hypotheses;
+    private String name;
+    private String source;
+
+    public Theorem(List<Hypothesis> results, List<Hypothesis> hypotheses, String name, String source) {
+        this.results = results;
+        this.hypotheses = hypotheses;
+        this.name = name;
+        this.source = source;
+    }
 
     @Override
     public String toPython(String delim) {
