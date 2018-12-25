@@ -27,6 +27,7 @@ from logic import Theorem, Universe, Hypothesis, util
 # hypotheses are formatted as follows
 # prefix#point1#...#point_n#value (leave value string blank if no value exists, but do not forget the final #)
 
+
 with open(os.path.join(abs_path, sys.argv[1]), 'r') as f:
     data = f.readlines()
 

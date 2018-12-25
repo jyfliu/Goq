@@ -382,7 +382,7 @@ def eqratio(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point, G: Point
 
 
 def similar_triangles(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
-    return Hypothesis(create_entities(({A, B, C}, {D, E, F})), prefix="simtri", equal=equal_pair, valid=check([3, 3]))
+    return Hypothesis(create_entities(({A}, {B}, {C}, {D}, {E}, {F})), prefix="simtri", valid=check([1, 1, 1, 1, 1, 1]))
 
 
 def simtri(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
@@ -390,8 +390,16 @@ def simtri(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
 
 
 def congruent_triangles(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
-    return Hypothesis(create_entities(({A, B, C}, {D, E, F})), prefix="contri", equal=equal_pair, valid=check([3, 3]))
+    return Hypothesis(create_entities(({A}, {B}, {C}, {D}, {E}, {F})), prefix="contri", valid=check([1, 1, 1, 1, 1, 1]))
 
 
 def contri(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
     return congruent_triangles(A, B, C, D, E, F)
+
+
+def triangle(A: Point, B: Point, C: Point):
+    return Hypothesis(create_entities(({A, B, C},)), prefix="tri", valid=check([3]))
+
+
+def tri(A: Point, B: Point, C: Point):
+    return triangle(A, B, C)
