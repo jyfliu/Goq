@@ -1,17 +1,21 @@
 package re.liujeff.web;
 
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import re.liujeff.web.model.Hypothesis;
 import re.liujeff.web.model.Theorem;
+import re.liujeff.web.repositories.PrefixRepository;
+import re.liujeff.web.repositories.TheoremRepository;
 import re.liujeff.web.services.ProblemSolvingService;
 import re.liujeff.web.services.PythonProblemSolvingService;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@SpringBootTest
 public class GetSolutionTest {
 
     @Test
@@ -43,6 +47,29 @@ public class GetSolutionTest {
         ProblemSolvingService solver = new PythonProblemSolvingService();
         solver.initialize(theorems);
         System.out.println(solver.getSolution(Collections.singletonList(hypo3), Arrays.asList(hypo0, hypo1, hypo2)).getProof());
+    }
+
+    @Autowired
+    private TheoremRepository tr;
+
+    @Autowired
+    private PrefixRepository pr;
+
+    @Test
+    public void addTheoremsTest() {
+        Iterable<Theorem> it = tr.findAll();
+        List<Theorem> list = new ArrayList<>();
+        it.forEach(list::add);
+
+        String A = "A";
+        String B = "B";
+        String C = "C";
+        String D = "D";
+        goal0 = new Hypothesis(pr.findByPrefix("eqangle").get(), list(C, A, A, D, D, B, B, C));
+
+        ProblemSolvingService solver = new PythonProblemSolvingService();
+        solver.initialize(list);
+        System.out.println(solver.getSolution(goals, constraints).getProof());
     }
 
 }
