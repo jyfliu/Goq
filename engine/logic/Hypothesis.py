@@ -389,10 +389,15 @@ def equal_triangles(first, second) -> bool:
         return False
     a = first.ent_list()
     b = second.ent_list()
-    for i in range(3):
-        if (match_sets(a[0], b[i]) and match_sets(a[1], b[(1+i)%3]) and match_sets(a[2], b[(2+i)%3]) and
-                match_sets(a[3], b[3+i]) and match_sets(a[4], b[3+((1+i)%3)]) and match_sets(a[5], b[3+((2+i)%3)])):
-            return True
+    for _ in range(2):
+        for i in range(3):
+            if (match_sets(a[0], b[i]) and match_sets(a[1], b[(1+i)%3]) and match_sets(a[2], b[(2+i)%3]) and
+                    match_sets(a[3], b[3+i]) and match_sets(a[4], b[3+((1+i)%3)]) and match_sets(a[5], b[3+((2+i)%3)])):
+                return True
+            if (match_sets(a[0], b[i]) and match_sets(a[2], b[(1+i)%3]) and match_sets(a[1], b[(2+i)%3]) and
+                    match_sets(a[3], b[3+i]) and match_sets(a[5], b[3+((1+i)%3)]) and match_sets(a[4], b[3+((2+i)%3)])):
+                return True
+        a, b = b, a # needed?
     return False
 
 
