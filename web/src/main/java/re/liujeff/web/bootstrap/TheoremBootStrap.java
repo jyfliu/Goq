@@ -240,12 +240,19 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
                 "isosceles triangles have congruent sides","definitions");
         theorems.add(isoscelesSides);
 
-        Theorem aaaSimilarity = new Theorem(list(new Hypothesis(simtri, list(A, B, C, D, E, F))),
+        Theorem aaaSymmetry = new Theorem(list(new Hypothesis(simtri, list(A, B, C, D, E, F))),
                 list(new Hypothesis(eqangle, list(A, B, B, C, D, E, E, F)),
                         new Hypothesis(eqangle, list(A, C, C, B, D, F, F, E)),
                         new Hypothesis(tri, list(A, B, C))),
-                "AAA triangle similarity", "definitions");
-        theorems.add(aaaSimilarity);
+                "AAA triangle symmetry", "definitions");
+        theorems.add(aaaSymmetry);
+
+        Theorem aaaAntiSymmetry = new Theorem(list(new Hypothesis(simtri, list(A, B, C, D, E, F))),
+                list(new Hypothesis(eqangle, list(A, B, B, C, F, E, E, D)),
+                        new Hypothesis(eqangle, list(A, C, C, B, E, F, F, D)),
+                        new Hypothesis(tri, list(A, B, C))),
+                "AAA Triangle antisymmetry", "definitions");
+        theorems.add(aaaAntiSymmetry);
 
 //        SAS SIMILARITY NOT TRUE WITH DIRECTED FULL ANGLES
 //        Theorem sasSimilarity = new Theorem(list(new Hypothesis(simtri, list(A, B, C, D, E, F))),
@@ -255,12 +262,12 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
 //                "SAS triangle similarity", "definitions");
 //        theorems.add(sasSimilarity);
 
-        Theorem sssSimilarity = new Theorem(list(new Hypothesis(simtri, list(A, B, C, D, E, F))),
+        Theorem sssSymmetry = new Theorem(list(new Hypothesis(simtri, list(A, B, C, D, E, F))),
                 list(new Hypothesis(eqratio, list(A, B, D, E, B, C, E, F)),
                         new Hypothesis(eqratio, list(A, B, D, E, A, C, D, F)),
                         new Hypothesis(tri, list(A, B, C))),
-                "SSS triangle similarity", "definitions");
-        theorems.add(sssSimilarity);
+                "SSS triangle symmetry", "definitions");
+        theorems.add(sssSymmetry);
 
         Theorem sssCongruence = new Theorem(list(new Hypothesis(contri, list(A, B, C, D, E, F))),
                 list(new Hypothesis(cong, list(A, B, D, E)), new Hypothesis(cong, list(B, C, E, F)),
@@ -302,16 +309,26 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
                 "Unfold congruent triangles", "definitions");
         theorems.add(congruenceImpliesAll);
 
-        // TODO URGENT REPLACE ALL ANGLES WITH DIRECTED ANGLES
-        Theorem similarImpliesAll = new Theorem(list(new Hypothesis(eqratio, list(A, B, D, E, B, C, E, F)),
+        Theorem similarImpliesRatios = new Theorem(list(new Hypothesis(eqratio, list(A, B, D, E, B, C, E, F)),
                 new Hypothesis(eqratio, list(A, B, D, E, A, C, D, F)),
-                new Hypothesis(eqratio, list(A, C, D, F, B, C, E, F)), // technically not needed by transitivity
-                new Hypothesis(eqangle, list(A, B, B, C, D, E, E, F)),
-                new Hypothesis(eqangle, list(A, C, C, B, D, F, F, E)),
-                new Hypothesis(eqangle, list(B, A, A, C, E, D, D, F))),
+                new Hypothesis(eqratio, list(A, C, D, F, B, C, E, F))), // technically not needed by transitivity
                 list(new Hypothesis(simtri, list(A, B, C, D, E, F))),
                 "Unfold similar triangles", "definitions");
-        theorems.add(similarImpliesAll);
+        theorems.add(similarImpliesRatios);
+
+        Theorem similarImpliesAngles = new Theorem(list(new Hypothesis(eqangle, list(A, B, B, C, D, E, E, F)),
+                new Hypothesis(eqangle, list(A, C, C, B, D, F, F, E))),
+                list(new Hypothesis(simtri, list(A, B, C, D, E, F)),
+                        new Hypothesis(eqangle, list(B, A, A, C, E, D, D, F))),
+                "Unfold similar trianles", "definitions");
+        theorems.add(similarImpliesAngles);
+
+        Theorem antisimilarImpliesAngles = new Theorem(list(new Hypothesis(eqangle, list(A, B, B, C, F, E, E, D)),
+                new Hypothesis(eqangle, list(A, C, C, B, E, F, F, D))),
+                list(new Hypothesis(simtri, list(A, B, C, D, E, F)),
+                        new Hypothesis(eqangle, list(B, A, A, C, F, D, D, E))),
+                "Unfold similar triangles", "definitions");
+        theorems.add(antisimilarImpliesAngles);
 
         Theorem paraImpliesCollinearity = new Theorem(list(new Hypothesis(coll, list(A, B, C))),
                 list(new Hypothesis(para, list(A, B, A, C))),
