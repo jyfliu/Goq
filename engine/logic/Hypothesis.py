@@ -381,7 +381,7 @@ def equal_ratios(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point, G: 
 
 
 def eqratio(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point, G: Point, H: Point):
-    return eqratio(A, B, C, D, E, F, G, H)
+    return equal_ratios(A, B, C, D, E, F, G, H)
 
 
 def equal_triangles(first, second) -> bool:

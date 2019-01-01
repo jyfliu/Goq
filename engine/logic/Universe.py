@@ -5,11 +5,10 @@ from logic.util import get_debug
 class Universe(object):
 
     def __init__(self) -> None:
-        self.points = []
+        self.points = set()
         self.knowledge = Knowledge.Knowledge()
         self.goals = []
         self.theorems = []
-        self.generate_axioms()
         self.heat_death = 20
 
     # insert a bunch of axioms
@@ -25,6 +24,8 @@ class Universe(object):
     def claim(self, hypothesis: Hypothesis) -> Hypothesis:
         for p in hypothesis.all_entities():
             assert p.bound(), "Goal must always contain bound entities"
+            if p not in self.points:
+                self.points.add(p)
             # (subject to change?) maybe like prove existence type goals
         self.goals += [hypothesis]
         if self.knowledge.contains(hypothesis):
@@ -66,8 +67,14 @@ class Universe(object):
     def step(self) -> None:
         # apply theorems
         for theorem in self.theorems:
+            if get_debug() >= 2:
+                print(theorem)
             returned = theorem.apply(self)
             self.derive_many(returned)
+            if get_debug() >= 2:
+                print(*[x[0] for x in returned])
+            if get_debug() >= 2:
+                print("DONE")
         # add a construction database (somehow ??? )
         # If I'm not going to catch a fish, I might as well not catch a big fish.
         # ?????????????
