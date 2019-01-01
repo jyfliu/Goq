@@ -3,6 +3,8 @@ package re.liujeff.web.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,11 +21,12 @@ public class Hypothesis implements Pythonable {
 
     @OneToOne
     private Prefix prefix;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name = "ENTITIES",
             joinColumns = @JoinColumn(name="HYPOTHESIS_ID")
     )
+    @Fetch(value = FetchMode.SUBSELECT)
     @Column(name = "ENTITY_NAME")
     private List<String> entities;
     private String value;
@@ -35,6 +38,9 @@ public class Hypothesis implements Pythonable {
     }
 
     public Hypothesis(Prefix prefix, List<String> entities, String value) {
+        if (prefix == null) {
+            throw new NullPointerException();
+        }
         this.prefix = prefix;
         this.entities = entities;
         this.value = value;

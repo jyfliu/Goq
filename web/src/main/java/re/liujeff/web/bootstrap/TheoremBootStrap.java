@@ -37,9 +37,31 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        if (prefixRepository.count() == 0) {
+            prefixRepository.saveAll(getPrefixes());
+        }
         if (theoremRepository.count() == 0) {
             theoremRepository.saveAll(getTheorems());
         }
+    }
+
+    private List<Prefix> getPrefixes() {
+        List<Prefix> prefixes = new ArrayList<>();
+
+        prefixes.add(new Prefix("coll", "collinear"));
+        prefixes.add(new Prefix("para", "parallel"));
+        prefixes.add(new Prefix("perp", "perpendicular"));
+        prefixes.add(new Prefix("midp", "midpoint"));
+        prefixes.add(new Prefix("circle", "circle"));
+        prefixes.add(new Prefix("cong", "congruent"));
+        prefixes.add(new Prefix("cyclic", "concyclic"));
+        prefixes.add(new Prefix("eqangle", "equal angles"));
+        prefixes.add(new Prefix("eqratio", "equal ratios"));
+        prefixes.add(new Prefix("simtri", "similar triangles"));
+        prefixes.add(new Prefix("contri", "contri"));
+        prefixes.add(new Prefix("tri", "triangle"));
+
+        return prefixes;
     }
 
     @SafeVarargs

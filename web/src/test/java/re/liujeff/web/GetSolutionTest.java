@@ -1,9 +1,13 @@
 package re.liujeff.web;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import re.liujeff.web.model.Hypothesis;
+import re.liujeff.web.model.Prefix;
 import re.liujeff.web.model.Theorem;
 import re.liujeff.web.repositories.PrefixRepository;
 import re.liujeff.web.repositories.TheoremRepository;
@@ -15,6 +19,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@RunWith( SpringJUnit4ClassRunner.class )
+@ContextConfiguration
 @SpringBootTest
 public class GetSolutionTest {
 
@@ -55,6 +61,9 @@ public class GetSolutionTest {
     @Autowired
     private PrefixRepository pr;
 
+    @Autowired
+    private ProblemSolvingService solver;
+
     @Test
     public void addTheoremsTest() {
         Iterable<Theorem> it = tr.findAll();
@@ -65,11 +74,25 @@ public class GetSolutionTest {
         String B = "B";
         String C = "C";
         String D = "D";
-        goal0 = new Hypothesis(pr.findByPrefix("eqangle").get(), list(C, A, A, D, D, B, B, C));
+        String E = "E";
 
-        ProblemSolvingService solver = new PythonProblemSolvingService();
+        Prefix eqangle = pr.findByPrefix("eqangle").orElse(null);
+        Prefix coll = pr.findByPrefix("coll").orElse(null);
+        Prefix cong = pr.findByPrefix("cong").orElse(null);
+        Prefix circle = pr.findByPrefix("circle").orElse(null);
+        Prefix midp = pr.findByPrefix("midp").orElse(null);
+        Hypothesis goal0 = new Hypothesis(eqangle, Arrays.asList(C, A, A, D, D, B, B, C));
+        Hypothesis con0 = new Hypothesis(circle, Arrays.asList(D, A, B, C));
+        Hypothesis con1 = new Hypothesis(midp, Arrays.asList(D, A, C));
+        Hypothesis con2 = new Hypothesis(midp, Arrays.asList(B, A, E));
+
+        List<Hypothesis> goals = new ArrayList<>(Collections.singletonList(goal0));
+        List<Hypothesis> constraints = new ArrayList<>(Arrays.asList(con0, con1, con2));
+
         solver.initialize(list);
+        System.out.println("*****HI*****");
         System.out.println(solver.getSolution(goals, constraints).getProof());
+        System.out.println("*****BYE*****");
     }
 
 }
