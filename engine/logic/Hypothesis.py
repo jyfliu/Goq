@@ -360,11 +360,24 @@ def get_map_sets(set1: Set[Point], set2: Set[Point]) -> List[Dict[Point, Point]]
     return maps
 
 
+def valid_eight(hypo):
+    if not check([2, 2, 2, 2])(hypo):
+        return False
+    a = hypo.entities.entities
+    for idx in eight_idx_array:
+        if a[idx[0]]==a[idx[1]]:
+            return False
+        if a[idx[0]]==a[idx[3]] and a[idx[1]]==a[idx[2]]:
+            return False
+    return True
+
+
+
 def equal_angles(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point, G: Point, H: Point):
     return Hypothesis(create_entities(({A, B}, {C, D}, {E, F}, {G, H})),
                       prefix="eqangle",
                       equal=equal_eight,
-                      valid=check([2, 2, 2, 2]),
+                      valid=valid_eight,
                       update_map=update_map_eight)
 
 
@@ -376,7 +389,7 @@ def equal_ratios(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point, G: 
     return Hypothesis(create_entities(({A, B}, {C, D}, {E, F}, {G, H})),
                       prefix="eqratio",
                       equal=equal_eight,
-                      valid=check([2, 2, 2, 2]),
+                      valid=valid_eight,
                       update_map=update_map_eight)
 
 

@@ -20,6 +20,9 @@ class Theorem(object):
     def try_apply(self, points: Dict, results: List,
                   hypotheses: List, sources: List,
                   universe) -> List[Tuple["Hypothesis", Tuple["Hypothesis"]]]:
+        for x in bind(points, results):
+            if not x.valid(x):
+                return []
         if not hypotheses:
             if len([v for k, v in points.items() if v.unbound()]):
                 all_points = all_maps(points, universe.points)
@@ -32,8 +35,11 @@ class Theorem(object):
                           + tuple(bind(points, sources))) for x in bind(points, results)})
         hypotheses = bind(points, hypotheses)
         hypo = hypotheses[0]
+        if not hypo.valid(hypo):
+            return []
         ret = []
-        print(len(universe.knowledge.get_all_of(hypo))) # TODO FOR SOME REASON ITS TOO SLOW
+       # print("\n".join(str(x) for x in universe.knowledge.get_all_of(hypo)))
+        #print(len(universe.knowledge.get_all_of(hypo)), len(hypotheses), datetime.datetime.now()) # TODO FOR SOME REASON ITS TOO SLOW
         for u in universe.knowledge.get_all_of(hypo):
             if match(hypo, u):
                 for cur_map in Hypothesis.update_map(points, hypo, u):
