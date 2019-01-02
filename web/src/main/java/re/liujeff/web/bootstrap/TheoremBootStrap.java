@@ -460,11 +460,6 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
                 "NDG", "NDGs");
         theorems.add(externalAngleImpliesTriangle);
 
-        Theorem unequalToTri = new Theorem(list(new Hypothesis(tri, list(A, B, C))),
-                list(new Hypothesis(unequal, list(A, B)), new Hypothesis(unequal, list(A, C)),
-                        new Hypothesis(unequal, list(B, C))), "NDG", "NDGs");
-        theorems.add(unequalToTri);
-
         // SIMILARLY BCD IS TRIANGLE IF D NOT EQUAL C BUT ALAS
         Theorem paraTriangleImpliesTriangle = new Theorem(list(new Hypothesis(tri, list(A, B, D))),
                 list(new Hypothesis(tri, list(A, B, C)), new Hypothesis(para, list(D, C, A, B))),
