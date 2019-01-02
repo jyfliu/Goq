@@ -1,7 +1,7 @@
 from logic import Knowledge, Theorem, Hypothesis
 from logic.util import get_debug
 
-
+# I'd rather do something and regret it than regret doing nothing at all.
 class Universe(object):
 
     def __init__(self) -> None:
@@ -44,6 +44,11 @@ class Universe(object):
     def derive(self, hypothesis: Hypothesis, sources):
         for p in hypothesis.all_entities():
             assert p.bound(), "Knowledge must only contain bound entities"
+        # print("DERIVING", hypothesis)
+        if not hypothesis.valid(hypothesis):
+            if get_debug() >= 1:
+                print("critical error, attempted to derive", hypothesis)
+            return
         self.knowledge.insert(hypothesis, sources)
         if hypothesis in self.goals:
             self.print_solved_goals(hypothesis)
@@ -86,9 +91,10 @@ class Universe(object):
                 self.print_knowledge()
             if get_debug() >= 1:
                 print("Step %d" % _)
+            before = len(self.knowledge.hypotheses)
             self.step()
+            after = len(self.knowledge.hypotheses)
+            if before == after:
+                break
         if get_debug() == 2:
             self.print_knowledge()
-
-    def why(self) -> None:
-        print("I'd rather do something and regret it than regret doing nothing at all.")
