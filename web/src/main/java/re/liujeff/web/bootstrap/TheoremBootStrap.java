@@ -37,6 +37,8 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        prefixRepository.deleteAll();
+        theoremRepository.deleteAll();
         if (prefixRepository.count() == 0) {
             prefixRepository.saveAll(getPrefixes());
         }
@@ -60,6 +62,7 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
         prefixes.add(new Prefix("simtri", "similar triangles"));
         prefixes.add(new Prefix("contri", "contri"));
         prefixes.add(new Prefix("tri", "triangle"));
+        prefixes.add(new Prefix("unequal", "unequal"));
 
         return prefixes;
     }
@@ -97,6 +100,7 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
     private Prefix simtri;
     private Prefix contri;
     private Prefix tri;
+    private Prefix unequal;
 
     private List<Theorem> getTheorems() {
         List<Theorem> theorems = new ArrayList<>();
@@ -125,6 +129,7 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
         simtri = findPrefix("simtri");
         contri = findPrefix("contri");
         tri = findPrefix("tri");
+        unequal = findPrefix("unequal");
 
         addDefinitions(theorems);
         addNDGs(theorems);
@@ -254,12 +259,14 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
 
         // potentially can add an isosceles hypothesis for ease of use?
         Theorem isoscelesAngles = new Theorem(list(new Hypothesis(eqangle, list(C, A, A, B, A, B, B, C))),
-                list(new Hypothesis(cong, list(C, A, C, B))),
+                list(new Hypothesis(cong, list(C, A, C, B)),
+                        new Hypothesis(tri, list(A, B, C))),
                 "isosceles triangles have congruent angles","definitions");
         theorems.add(isoscelesAngles);
 
         Theorem isoscelesSides = new Theorem(list(new Hypothesis(cong, list(C, A, C, B))),
-                list(new Hypothesis(eqangle, list(C, A, A, B, A, B, B, C))),
+                list(new Hypothesis(eqangle, list(C, A, A, B, A, B, B, C)),
+                        new Hypothesis(tri, list(A, B, C))),
                 "isosceles triangles have congruent sides","definitions");
         theorems.add(isoscelesSides);
 
@@ -412,8 +419,9 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
                 "Congruent lengths have same ratio", "definitions");
         theorems.add(congruentEqualLengths);
 
-        Theorem angleExtendRay = new Theorem(list(new Hypothesis(eqangle, list(D, A, A, B, D, A, A, C))),
-                list(new Hypothesis(coll, list(A, B, C))), "Extended angle", "definitions");
+        Theorem angleExtendRay = new Theorem(list(new Hypothesis(eqangle, list(D, A, A, C, E, F, F, G))),
+                list(new Hypothesis(coll, list(A, B, C)),
+                        new Hypothesis(eqangle, list(D, A, A, B, E, F, F, G))), "Extended angle", "definitions");
         theorems.add(angleExtendRay);
 
         Theorem supplementaryAnglesEqual = new Theorem(list(new Hypothesis(eqangle, list(A, B, B, C, D, E, E, F))),
@@ -434,15 +442,28 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
                 "NDG", "NDGs");
         theorems.add(equalAnglesImpliesTriangle);
 
-//        TODO ADD ANOTHER NDG UNEQUAL(A, B) WHICH ENSURES A NOT EQUAL B
-//        potential theorems include stuff like
-//        unequal(a, b) <-| unequal(a, c), midp(b, a, c)
-//        etc
+        Theorem triToUnequal = new Theorem(list(new Hypothesis(unequal, list(A, B)),
+                new Hypothesis(unequal, list(A, C)), new Hypothesis(unequal, list(B, C))),
+                list(new Hypothesis(tri, list(A, B, C))), "NDG", "NDGs");
+        theorems.add(triToUnequal);
+
+        Theorem midpToUnequal = new Theorem(list(new Hypothesis(unequal, list(A, B)),
+                new Hypothesis(unequal, list(B, C))),
+                list(new Hypothesis(unequal, list(A, C)), new Hypothesis(midp, list(B, A, C))),
+                "NDG", "NDGs");
+        theorems.add(midpToUnequal);
+
 //        NOT GUARANTEED UNLESS A NOT EQUAL B
-//        Theorem externalAngleImpliesTriangle = new Theorem(list(new Hypothesis(tri, list(A, B, D))),
-//                list(new Hypothesis(tri, list(B, C, D)), new Hypothesis(coll, list(A, B, C))),
-//                "NDG", "NDGs");
-//        theorems.add(externalAngleImpliesTriangle);
+        Theorem externalAngleImpliesTriangle = new Theorem(list(new Hypothesis(tri, list(A, B, D))),
+                list(new Hypothesis(tri, list(B, C, D)), new Hypothesis(coll, list(A, B, C)),
+                        new Hypothesis(unequal, list(A, B))),
+                "NDG", "NDGs");
+        theorems.add(externalAngleImpliesTriangle);
+
+        Theorem unequalToTri = new Theorem(list(new Hypothesis(tri, list(A, B, C))),
+                list(new Hypothesis(unequal, list(A, B)), new Hypothesis(unequal, list(A, C)),
+                        new Hypothesis(unequal, list(B, C))), "NDG", "NDGs");
+        theorems.add(unequalToTri);
 
         // SIMILARLY BCD IS TRIANGLE IF D NOT EQUAL C BUT ALAS
         Theorem paraTriangleImpliesTriangle = new Theorem(list(new Hypothesis(tri, list(A, B, D))),
