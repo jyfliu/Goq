@@ -37,8 +37,8 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        prefixRepository.deleteAll();
-        theoremRepository.deleteAll();
+//        prefixRepository.deleteAll();
+//        theoremRepository.deleteAll();
         if (prefixRepository.count() == 0) {
             prefixRepository.saveAll(getPrefixes());
         }
@@ -333,7 +333,7 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
         theorems.add(similarToCongruence);
 
         Theorem congruenceImpliesAll = new Theorem(list(new Hypothesis(simtri, list(A, B, C, D, E, F)),
-                new Hypothesis(cong, list(A, B, D, E)), new Hypothesis(cong, list(A, E, D, F)),
+                new Hypothesis(cong, list(A, B, D, E)), new Hypothesis(cong, list(A, C, D, F)),
                 new Hypothesis(cong, list(B, C, E, F))),
                 list(new Hypothesis(contri, list(A, B, C, D, E, F))),
                 "Unfold congruent triangles", "definitions");
