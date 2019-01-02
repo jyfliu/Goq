@@ -1,5 +1,8 @@
+import time
+
 from logic import Knowledge, Theorem, Hypothesis
 from logic.util import get_debug
+
 
 # I'd rather do something and regret it than regret doing nothing at all.
 class Universe(object):
@@ -95,7 +98,7 @@ class Universe(object):
             # update the previous call signature
             self.last_theorem_application[theorem] = [len(self.knowledge.get_all_of(x)) for x in theorem.hypotheses]
             if get_debug() >= 2:
-                print(*[x[0] for x in returned])
+                print("returned: ",*[x[0] for x in returned])
             if get_debug() >= 2:
                 print("DONE")
         # add a construction database (somehow ??? )
@@ -104,6 +107,9 @@ class Universe(object):
 
     # run until it no longer runs
     def run_til_heat_death(self) -> None:
+        if get_debug() >= 1:
+            print("BEGINNING RUN")
+        start_time = time.time()
         for _ in range(self.heat_death):
             if get_debug() >= 2:
                 self.print_knowledge()
@@ -116,3 +122,5 @@ class Universe(object):
                 break
         if get_debug() >= 2:
             self.print_knowledge()
+        if get_debug() >= 1:
+            print("TIME ELAPSED:", time.time()-start_time)
