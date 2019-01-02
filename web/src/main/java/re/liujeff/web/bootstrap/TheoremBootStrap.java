@@ -402,10 +402,10 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
                 "All right angles are equal", "definitions");
         theorems.add(rightAnglesEqual);
 
-        Theorem zeroAnglesEqual = new Theorem(list(new Hypothesis(eqangle, list(A, B, C, D, E, F, G, H))),
-                list(new Hypothesis(para, list(A, B, C, D)), new Hypothesis(para, list(E, F, G, H))),
-                "All zero angles are equal", "definitions");
-        theorems.add(zeroAnglesEqual);
+//        Theorem zeroAnglesEqual = new Theorem(list(new Hypothesis(eqangle, list(A, B, C, D, E, F, G, H))),
+//                list(new Hypothesis(para, list(A, B, C, D)), new Hypothesis(para, list(E, F, G, H))),
+//                "All zero angles are equal", "definitions");
+//        theorems.add(zeroAnglesEqual);
 
         Theorem congruentEqualLengths = new Theorem(list(new Hypothesis(cong, list(A, B, C, D))),
                 list(new Hypothesis(eqratio, list(A, B, C, D, E, F, G, H)), new Hypothesis(cong, list(E, F, G, H))),
