@@ -138,13 +138,14 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
                 Collections.emptyList(), "Congruency is reflexive", "definitions");
         theorems.add(congReflexivity);
 
-         Theorem eqangleReflexivity = new Theorem(list(new Hypothesis(eqangle, list(A, B, C, D, A, B, C, D))),
-                Collections.emptyList(), "Equality of angles is reflexive", "definitions");
-        theorems.add(eqangleReflexivity);
-
-        Theorem eqratioReflexivity = new Theorem(list(new Hypothesis(eqratio, list(A, B, C, D, A, B, C, D))),
-                Collections.emptyList(), "Equality of ratios is reflexive", "definitions");
-        theorems.add(eqratioReflexivity);
+//        THESE ARENT GOOD
+//         Theorem eqangleReflexivity = new Theorem(list(new Hypothesis(eqangle, list(A, B, C, D, A, B, C, D))),
+//                Collections.emptyList(), "Equality of angles is reflexive", "definitions");
+//        theorems.add(eqangleReflexivity);
+//
+//        Theorem eqratioReflexivity = new Theorem(list(new Hypothesis(eqratio, list(A, B, C, D, A, B, C, D))),
+//                Collections.emptyList(), "Equality of ratios is reflexive", "definitions");
+//        theorems.add(eqratioReflexivity);
 
         Theorem collTrans = new Theorem(list(new Hypothesis(coll, list(C, D, A))),
                 list(new Hypothesis(coll, list(A, B, C)), new Hypothesis(coll, list(A, B, D))),
