@@ -1,6 +1,7 @@
 from typing import Any, List, Dict
 
 from logic import Hypothesis
+from logic.util import get_debug
 
 
 class Knowledge(object):
@@ -56,6 +57,8 @@ class Knowledge(object):
         for v in self.type.values():
             for h in v:
                 print(">> ", h, sep="")
+                if get_debug() >= 3:
+                    self.print_stack_trace(h)
 
 def left_implies() -> str:
     return "<-|"

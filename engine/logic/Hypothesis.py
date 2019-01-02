@@ -422,9 +422,18 @@ def equal_triangles(first, second) -> bool:
     return False
 
 
+def valid_tri_pair(hypo):
+    if not check([1, 1, 1, 1, 1, 1])(hypo):
+        return False
+    a = hypo.ent_list()
+    b = a[0] | a[1] | a[2]
+    c = a[3] | a[4] | a[5]
+    return b != c and len(b) == 3 and len(c) == 3
+
+
 def similar_triangles(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
     return Hypothesis(create_entities(({A}, {B}, {C}, {D}, {E}, {F})), prefix="simtri",
-                      equal=equal_triangles, valid=check([1, 1, 1, 1, 1, 1]))
+                      equal=equal_triangles, valid=valid_tri_pair)
 
 
 def simtri(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
@@ -433,7 +442,7 @@ def simtri(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
 
 def congruent_triangles(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
     return Hypothesis(create_entities(({A}, {B}, {C}, {D}, {E}, {F})), prefix="contri",
-                      equal=equal_triangles, valid=check([1, 1, 1, 1, 1, 1]))
+                      equal=equal_triangles, valid=valid_tri_pair)
 
 
 def contri(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):

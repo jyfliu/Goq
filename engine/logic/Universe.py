@@ -9,6 +9,7 @@ class Universe(object):
         self.knowledge = Knowledge.Knowledge()
         self.goals = []
         self.theorems = []
+        self.last_theorem_application = dict()
         self.heat_death = 20
 
     # insert a bunch of axioms
@@ -18,6 +19,7 @@ class Universe(object):
     # add theorem to universe
     def admit(self, theorem: Theorem) -> Theorem:
         self.theorems += [theorem]
+        self.last_theorem_application[theorem] = []
         return theorem
 
     # add hypothesis to goals
@@ -59,6 +61,13 @@ class Universe(object):
         for hypo, sources in list_of_hypos:
             self.derive(hypo, sources)
 
+    def assert_points_unique(self):
+        for p in self.points:
+            for q in self.points:
+                if p != q:
+                    self.pose(Hypothesis.unequal(p, q))
+
+
     def print_solved_goals(self, hypothesis: Hypothesis) -> None:
         for goal in self.goals:
             if goal == hypothesis and get_debug() >= 0:
@@ -74,8 +83,17 @@ class Universe(object):
         for theorem in self.theorems:
             if get_debug() >= 2:
                 print(theorem)
+            # get the hypotheses signature of the theorem
+            signature = [len(self.knowledge.get_all_of(x)) for x in theorem.hypotheses]
+            if self.last_theorem_application[theorem] == signature:
+                # if our universe hasn't changed significantly, don't repeat theorem call
+                if get_debug() >= 2:
+                    print("SKIPPED")
+                continue
             returned = theorem.apply(self)
             self.derive_many(returned)
+            # update the previous call signature
+            self.last_theorem_application[theorem] = [len(self.knowledge.get_all_of(x)) for x in theorem.hypotheses]
             if get_debug() >= 2:
                 print(*[x[0] for x in returned])
             if get_debug() >= 2:
@@ -87,7 +105,7 @@ class Universe(object):
     # run until it no longer runs
     def run_til_heat_death(self) -> None:
         for _ in range(self.heat_death):
-            if get_debug() == 2:
+            if get_debug() >= 2:
                 self.print_knowledge()
             if get_debug() >= 1:
                 print("Step %d" % _)
@@ -96,5 +114,5 @@ class Universe(object):
             after = len(self.knowledge.hypotheses)
             if before == after:
                 break
-        if get_debug() == 2:
+        if get_debug() >= 2:
             self.print_knowledge()

@@ -20,8 +20,10 @@ class Theorem(object):
     def try_apply(self, points: Dict, results: List,
                   hypotheses: List, sources: List,
                   universe) -> List[Tuple["Hypothesis", Tuple["Hypothesis"]]]:
+       # results = [x for x in bind(points, results) if x.valid(x)]
         for x in bind(points, results):
             if not x.valid(x):
+                # print(bind(points, results))
                 return []
         if not hypotheses:
             if len([v for k, v in points.items() if v.unbound()]):
@@ -54,6 +56,9 @@ class Theorem(object):
 
     def __repr__(self) -> str:
         return self.__str__()
+
+    def __eq__(self, other):
+        return str(self) == str(other)
 
     def __hash__(self):
         return hash(self.__str__())
