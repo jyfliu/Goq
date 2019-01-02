@@ -236,8 +236,16 @@ def coll(A: Point, B: Point, C: Point) -> Hypothesis:
     return collinear(A, B, C)
 
 
+def valid_parallel(hypo):
+    if not check([2, 2])(hypo):
+        return False
+    if hypo.ent_list()[0] == hypo.ent_list()[1]:
+        return False
+    return True
+
+
 def parallel(A: Point, B: Point, C: Point, D: Point) -> Hypothesis:
-    return Hypothesis(create_entities(({A, B}, {C, D})), prefix="para", equal=equal_pair, valid=check([2, 2]))
+    return Hypothesis(create_entities(({A, B}, {C, D})), prefix="para", equal=equal_pair, valid=valid_parallel)
 
 
 def para(A: Point, B: Point, C: Point, D: Point) -> Hypothesis:
@@ -438,3 +446,7 @@ def triangle(A: Point, B: Point, C: Point):
 
 def tri(A: Point, B: Point, C: Point):
     return triangle(A, B, C)
+
+
+def unequal(A: Point, B: Point):
+    return Hypothesis(create_entities(({A, B},)), prefix="unequal", valid=check([2]))
