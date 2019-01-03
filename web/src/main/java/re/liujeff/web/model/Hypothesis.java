@@ -52,7 +52,7 @@ public class Hypothesis implements Pythonable {
 
     @Override
     public String toPython(String delim) {
-        return prefix+delim+String.join(delim, entities)+delim+value;
+        return prefix.getPrefix()+delim+String.join(delim, entities)+delim+value;
     }
 
 }

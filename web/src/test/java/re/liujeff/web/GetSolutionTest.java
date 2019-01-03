@@ -81,13 +81,15 @@ public class GetSolutionTest {
         Prefix cong = pr.findByPrefix("cong").orElse(null);
         Prefix circle = pr.findByPrefix("circle").orElse(null);
         Prefix midp = pr.findByPrefix("midp").orElse(null);
-        Hypothesis goal0 = new Hypothesis(eqangle, Arrays.asList(C, A, A, D, D, B, B, C));
+        Prefix tri = pr.findByPrefix("tri").orElse(null);
+        Hypothesis goal0 = new Hypothesis(eqangle, Arrays.asList(C, A, A, B, B, E, E, C));
         Hypothesis con0 = new Hypothesis(circle, Arrays.asList(D, A, B, C));
         Hypothesis con1 = new Hypothesis(midp, Arrays.asList(D, A, C));
         Hypothesis con2 = new Hypothesis(midp, Arrays.asList(B, A, E));
+        Hypothesis ndg0 = new Hypothesis(tri, Arrays.asList(A, B, C));
 
         List<Hypothesis> goals = new ArrayList<>(Collections.singletonList(goal0));
-        List<Hypothesis> constraints = new ArrayList<>(Arrays.asList(con0, con1, con2));
+        List<Hypothesis> constraints = new ArrayList<>(Arrays.asList(con0, con1, con2, ndg0));
 
         solver.initialize(list);
         System.out.println("*****HI*****");

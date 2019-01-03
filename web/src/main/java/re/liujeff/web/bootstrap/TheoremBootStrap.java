@@ -37,6 +37,8 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+//        prefixRepository.deleteAll();
+//        theoremRepository.deleteAll();
         if (prefixRepository.count() == 0) {
             prefixRepository.saveAll(getPrefixes());
         }
@@ -60,6 +62,7 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
         prefixes.add(new Prefix("simtri", "similar triangles"));
         prefixes.add(new Prefix("contri", "contri"));
         prefixes.add(new Prefix("tri", "triangle"));
+        prefixes.add(new Prefix("unequal", "unequal"));
 
         return prefixes;
     }
@@ -97,6 +100,7 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
     private Prefix simtri;
     private Prefix contri;
     private Prefix tri;
+    private Prefix unequal;
 
     private List<Theorem> getTheorems() {
         List<Theorem> theorems = new ArrayList<>();
@@ -125,6 +129,7 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
         simtri = findPrefix("simtri");
         contri = findPrefix("contri");
         tri = findPrefix("tri");
+        unequal = findPrefix("unequal");
 
         addDefinitions(theorems);
         addNDGs(theorems);
@@ -138,13 +143,14 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
                 Collections.emptyList(), "Congruency is reflexive", "definitions");
         theorems.add(congReflexivity);
 
-         Theorem eqangleReflexivity = new Theorem(list(new Hypothesis(eqangle, list(A, B, C, D, A, B, C, D))),
-                Collections.emptyList(), "Equality of angles is reflexive", "definitions");
-        theorems.add(eqangleReflexivity);
-
-        Theorem eqratioReflexivity = new Theorem(list(new Hypothesis(eqratio, list(A, B, C, D, A, B, C, D))),
-                Collections.emptyList(), "Equality of ratios is reflexive", "definitions");
-        theorems.add(eqratioReflexivity);
+//        THESE ARENT GOOD
+//         Theorem eqangleReflexivity = new Theorem(list(new Hypothesis(eqangle, list(A, B, C, D, A, B, C, D))),
+//                Collections.emptyList(), "Equality of angles is reflexive", "definitions");
+//        theorems.add(eqangleReflexivity);
+//
+//        Theorem eqratioReflexivity = new Theorem(list(new Hypothesis(eqratio, list(A, B, C, D, A, B, C, D))),
+//                Collections.emptyList(), "Equality of ratios is reflexive", "definitions");
+//        theorems.add(eqratioReflexivity);
 
         Theorem collTrans = new Theorem(list(new Hypothesis(coll, list(C, D, A))),
                 list(new Hypothesis(coll, list(A, B, C)), new Hypothesis(coll, list(A, B, D))),
@@ -253,12 +259,14 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
 
         // potentially can add an isosceles hypothesis for ease of use?
         Theorem isoscelesAngles = new Theorem(list(new Hypothesis(eqangle, list(C, A, A, B, A, B, B, C))),
-                list(new Hypothesis(cong, list(C, A, C, B))),
+                list(new Hypothesis(cong, list(C, A, C, B)),
+                        new Hypothesis(tri, list(A, B, C))),
                 "isosceles triangles have congruent angles","definitions");
         theorems.add(isoscelesAngles);
 
         Theorem isoscelesSides = new Theorem(list(new Hypothesis(cong, list(C, A, C, B))),
-                list(new Hypothesis(eqangle, list(C, A, A, B, A, B, B, C))),
+                list(new Hypothesis(eqangle, list(C, A, A, B, A, B, B, C)),
+                        new Hypothesis(tri, list(A, B, C))),
                 "isosceles triangles have congruent sides","definitions");
         theorems.add(isoscelesSides);
 
@@ -325,7 +333,7 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
         theorems.add(similarToCongruence);
 
         Theorem congruenceImpliesAll = new Theorem(list(new Hypothesis(simtri, list(A, B, C, D, E, F)),
-                new Hypothesis(cong, list(A, B, D, E)), new Hypothesis(cong, list(A, E, D, F)),
+                new Hypothesis(cong, list(A, B, D, E)), new Hypothesis(cong, list(A, C, D, F)),
                 new Hypothesis(cong, list(B, C, E, F))),
                 list(new Hypothesis(contri, list(A, B, C, D, E, F))),
                 "Unfold congruent triangles", "definitions");
@@ -401,18 +409,19 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
                 "All right angles are equal", "definitions");
         theorems.add(rightAnglesEqual);
 
-        Theorem zeroAnglesEqual = new Theorem(list(new Hypothesis(eqangle, list(A, B, C, D, E, F, G, H))),
-                list(new Hypothesis(para, list(A, B, C, D)), new Hypothesis(para, list(E, F, G, H))),
-                "All zero angles are equal", "definitions");
-        theorems.add(zeroAnglesEqual);
+//        Theorem zeroAnglesEqual = new Theorem(list(new Hypothesis(eqangle, list(A, B, C, D, E, F, G, H))),
+//                list(new Hypothesis(para, list(A, B, C, D)), new Hypothesis(para, list(E, F, G, H))),
+//                "All zero angles are equal", "definitions");
+//        theorems.add(zeroAnglesEqual);
 
         Theorem congruentEqualLengths = new Theorem(list(new Hypothesis(cong, list(A, B, C, D))),
                 list(new Hypothesis(eqratio, list(A, B, C, D, E, F, G, H)), new Hypothesis(cong, list(E, F, G, H))),
                 "Congruent lengths have same ratio", "definitions");
         theorems.add(congruentEqualLengths);
 
-        Theorem angleExtendRay = new Theorem(list(new Hypothesis(eqangle, list(D, A, A, B, D, A, A, C))),
-                list(new Hypothesis(coll, list(A, B, C))), "Extended angle", "definitions");
+        Theorem angleExtendRay = new Theorem(list(new Hypothesis(eqangle, list(D, A, A, C, E, F, F, G))),
+                list(new Hypothesis(coll, list(A, B, C)),
+                        new Hypothesis(eqangle, list(D, A, A, B, E, F, F, G))), "Extended angle", "definitions");
         theorems.add(angleExtendRay);
 
         Theorem supplementaryAnglesEqual = new Theorem(list(new Hypothesis(eqangle, list(A, B, B, C, D, E, E, F))),
@@ -433,15 +442,23 @@ public class TheoremBootStrap implements ApplicationListener<ContextRefreshedEve
                 "NDG", "NDGs");
         theorems.add(equalAnglesImpliesTriangle);
 
-//        TODO ADD ANOTHER NDG UNEQUAL(A, B) WHICH ENSURES A NOT EQUAL B
-//        potential theorems include stuff like
-//        unequal(a, b) <-| unequal(a, c), midp(b, a, c)
-//        etc
+        Theorem triToUnequal = new Theorem(list(new Hypothesis(unequal, list(A, B)),
+                new Hypothesis(unequal, list(A, C)), new Hypothesis(unequal, list(B, C))),
+                list(new Hypothesis(tri, list(A, B, C))), "NDG", "NDGs");
+        theorems.add(triToUnequal);
+
+        Theorem midpToUnequal = new Theorem(list(new Hypothesis(unequal, list(A, B)),
+                new Hypothesis(unequal, list(B, C))),
+                list(new Hypothesis(unequal, list(A, C)), new Hypothesis(midp, list(B, A, C))),
+                "NDG", "NDGs");
+        theorems.add(midpToUnequal);
+
 //        NOT GUARANTEED UNLESS A NOT EQUAL B
-//        Theorem externalAngleImpliesTriangle = new Theorem(list(new Hypothesis(tri, list(A, B, D))),
-//                list(new Hypothesis(tri, list(B, C, D)), new Hypothesis(coll, list(A, B, C))),
-//                "NDG", "NDGs");
-//        theorems.add(externalAngleImpliesTriangle);
+        Theorem externalAngleImpliesTriangle = new Theorem(list(new Hypothesis(tri, list(A, B, D))),
+                list(new Hypothesis(tri, list(B, C, D)), new Hypothesis(coll, list(A, B, C)),
+                        new Hypothesis(unequal, list(A, B))),
+                "NDG", "NDGs");
+        theorems.add(externalAngleImpliesTriangle);
 
         // SIMILARLY BCD IS TRIANGLE IF D NOT EQUAL C BUT ALAS
         Theorem paraTriangleImpliesTriangle = new Theorem(list(new Hypothesis(tri, list(A, B, D))),
