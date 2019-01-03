@@ -1,8 +1,10 @@
 from functools import reduce
-from typing import List, Dict, Tuple
+from itertools import product
+from typing import List, Dict, Tuple, Any, Set
 
 from logic import Hypothesis, Point
 from logic.Knowledge import left_implies
+from logic.util import merge
 
 
 class Theorem(object):
@@ -18,12 +20,28 @@ class Theorem(object):
     def try_apply(self, points: Dict, results: List,
                   hypotheses: List, sources: List,
                   universe) -> List[Tuple["Hypothesis", Tuple["Hypothesis"]]]:
+       # results = [x for x in bind(points, results) if x.valid(x)]
+        for x in bind(points, results):
+            if not x.valid(x):
+                # print(bind(points, results))
+                return []
         if not hypotheses:
+            if len([v for k, v in points.items() if v.unbound()]):
+                all_points = all_maps(points, universe.points)
+                ans = []
+                for cur_points in all_points:
+                    ans += list({(x, (" ".join((self.name, left_implies(), self.source)),)
+                                  + tuple(bind(cur_points, sources))) for x in bind(cur_points, results) if x.valid(x)})
+                return ans
             return list({(x, (" ".join((self.name, left_implies(),self.source)),)
                           + tuple(bind(points, sources))) for x in bind(points, results)})
         hypotheses = bind(points, hypotheses)
         hypo = hypotheses[0]
+        if not hypo.valid(hypo):
+            return []
         ret = []
+       # print("\n".join(str(x) for x in universe.knowledge.get_all_of(hypo)))
+        #print(len(universe.knowledge.get_all_of(hypo)), len(hypotheses), datetime.datetime.now()) # TODO FOR SOME REASON ITS TOO SLOW
         for u in universe.knowledge.get_all_of(hypo):
             if match(hypo, u):
                 for cur_map in Hypothesis.update_map(points, hypo, u):
@@ -38,6 +56,9 @@ class Theorem(object):
 
     def __repr__(self) -> str:
         return self.__str__()
+
+    def __eq__(self, other):
+        return str(self) == str(other)
 
     def __hash__(self):
         return hash(self.__str__())
@@ -72,6 +93,16 @@ def identity_point_map(size: int) -> Dict:
     for i in range(size):
         points[Point.unbound_point(i)] = Point.unbound_point(i)
     return points
+
+
+def all_maps(base_map: Dict, points: Set[Any]):
+    maps = []
+    all_unbound = [v for k, v in base_map.items() if v.unbound()]
+    for prod in product(list(points), repeat=len(all_unbound)):
+        new_map = dict(zip(all_unbound, prod))
+        maps.append(merge(base_map, new_map))
+    return maps
+
 
 #
 # example: Thale's Theorem

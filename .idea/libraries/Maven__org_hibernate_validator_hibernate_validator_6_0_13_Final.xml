@@ -3,7 +3,6 @@
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/org/hibernate/validator/hibernate-validator/6.0.13.Final/hibernate-validator-6.0.13.Final.jar!/" />
     </CLASSES>
-    <JAVADOC />
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/org/hibernate/validator/hibernate-validator/6.0.13.Final/hibernate-validator-6.0.13.Final-sources.jar!/" />
     </SOURCES>

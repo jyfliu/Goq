@@ -8,7 +8,6 @@ from logic.util import merge, get_debug
 
 
 class Hypothesis(object):
-
     entities: Entities
     prefix: str
     value: str
@@ -60,7 +59,7 @@ class Hypothesis(object):
         """
         if not isinstance(other, Hypothesis):
             return False
-        if not self.valid(self) or not other.valid(other): # they must consider themselves valid
+        if not self.valid(self) or not other.valid(other):  # they must consider themselves valid
             return False
         return self.equal(self, other)
 
@@ -109,8 +108,11 @@ def check(lengths: List[int], unique=None) -> Callable[[Hypothesis], bool]:
             if len(tmp) != sum:
                 return False
         return True
+
     return ret
 
+
+map_cache = dict()
 
 # Given a map M and two hypotheses, source and destination (s and d for short) satisfying
 # d has only bound variables
@@ -151,13 +153,24 @@ def update_map(cur_map: Dict[Point, Point], source: Hypothesis, destination: Hyp
     for x in b:
         for y in x:
             assert y.bound(), "Destination may only contain bound points"
-    return source.update_map(cur_map, source, destination)
+    cur_hash = ("".join(sorted(",".join((str(k), str(v))) for k, v in cur_map.items())), str(source), str(destination))
+    if cur_hash not in map_cache:
+        map_cache[cur_hash] = source.update_map(cur_map, source, destination)
+    # else:
+    #     what = source.update_map(cur_map, source, destination)
+    #     what = sorted(what, key=str)
+    #     map_cache[cur_hash] = sorted(map_cache[cur_hash], key=str)
+    #     if what != map_cache[cur_hash]:
+    #         print("NEW", "\n".join(str(x) for x in what), "OLD", "\n".join(str(x) for x in map_cache[cur_hash])
+    #               , source, destination, sep="\n")
+    return map_cache[cur_hash]
 
 
 # O((n permute k)^m) where k is size of each bucket, m is how many buckets there are, n is number of points in dest
 # = O(n^{km})
 # default, and slowest option, but guaranteed to work no matter what source.equal is
-def update_map_sep(cur_map: Dict[Point, Point], source: Hypothesis, destination: Hypothesis) -> List[Dict[Point, Point]]:
+def update_map_sep(cur_map: Dict[Point, Point], source: Hypothesis, destination: Hypothesis) -> List[
+    Dict[Point, Point]]:
     # ok = False
     # for key, val in cur_map.items(): # check if there is still anything left to change
     #     if key.name == val.name:
@@ -175,7 +188,7 @@ def update_map_sep(cur_map: Dict[Point, Point], source: Hypothesis, destination:
         if not unbound_points:
             continue
         required_mappings += [unbound_points]
-        choices += [permutations(potential_mappings, len(unbound_points)),]
+        choices += [permutations(potential_mappings, len(unbound_points)), ]
     for choice in product(*choices):
         temp_map = dict()
         for r, c in zip(required_mappings, choice):
@@ -187,7 +200,7 @@ def update_map_sep(cur_map: Dict[Point, Point], source: Hypothesis, destination:
         if temp_source != destination:
             continue
         maps += [merge_map]
-    if not maps and get_debug() == 1:
+    if not maps and get_debug() >= 2:
         print("Failed to create mapping", cur_map, source, destination, sep="\n")
     return [dict(t) for t in {tuple(d.items()) for d in maps}]
 
@@ -200,11 +213,11 @@ def update_map_bijection(cur_map: Dict[Point, Point], source: Hypothesis,
     maps = []
     for choice in product(*[get_map_sets(x, y) for x, y in zip(a, b)]):
         try:
-            m = reduce(merge, [cur_map]+list(choice), {})
+            m = reduce(merge, [cur_map] + list(choice), {})
             maps += [m]
         except ValueError:
             pass
-    if not maps:
+    if not maps and get_debug() >= 2:
         print("Failed to create mapping ", cur_map, source, destination, sep="\n")
     return maps
 
@@ -235,8 +248,16 @@ def coll(A: Point, B: Point, C: Point) -> Hypothesis:
     return collinear(A, B, C)
 
 
+def valid_parallel(hypo):
+    if not check([2, 2])(hypo):
+        return False
+    if hypo.ent_list()[0] == hypo.ent_list()[1]:
+        return False
+    return True
+
+
 def parallel(A: Point, B: Point, C: Point, D: Point) -> Hypothesis:
-    return Hypothesis(create_entities(({A, B}, {C, D})), prefix="para", equal=equal_pair, valid=check([2, 2]))
+    return Hypothesis(create_entities(({A, B}, {C, D})), prefix="para", equal=equal_pair, valid=valid_parallel)
 
 
 def para(A: Point, B: Point, C: Point, D: Point) -> Hypothesis:
@@ -263,7 +284,7 @@ def circle(O: Point, A: Point, B: Point, C: Point):
     return Hypothesis(create_entities(({O}, {A, B, C})), prefix="circle", valid=check([1, 3], [(0, 1)]))
 
 
-def congruent(A: Point, B: Point, C: Point, D: Point): # AB cong CD
+def congruent(A: Point, B: Point, C: Point, D: Point):  # AB cong CD
     return Hypothesis(create_entities(({A, B}, {C, D})), prefix="cong", equal=equal_pair, valid=check([2, 2]))
 
 
@@ -295,6 +316,8 @@ def cyclic(A: Point, B: Point, C: Point, D: Point):
     # EF/AB = GH/CD
     # GH/EF = CD/AB
     # GH/CD = EF/AB
+
+
 eight_idx_array = [(0, 1, 2, 3),
                    (0, 2, 1, 3),
                    (1, 0, 3, 2),
@@ -357,11 +380,24 @@ def get_map_sets(set1: Set[Point], set2: Set[Point]) -> List[Dict[Point, Point]]
     return maps
 
 
+def valid_eight(hypo):
+    if not check([2, 2, 2, 2])(hypo):
+        return False
+    a = hypo.entities.entities
+    for idx in eight_idx_array:
+        if a[idx[0]]==a[idx[1]]:
+            return False
+        if a[idx[0]]==a[idx[3]] and a[idx[1]]==a[idx[2]]:
+            return False
+    return True
+
+
+
 def equal_angles(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point, G: Point, H: Point):
     return Hypothesis(create_entities(({A, B}, {C, D}, {E, F}, {G, H})),
                       prefix="eqangle",
                       equal=equal_eight,
-                      valid=check([2, 2, 2, 2]),
+                      valid=valid_eight,
                       update_map=update_map_eight)
 
 
@@ -373,16 +409,43 @@ def equal_ratios(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point, G: 
     return Hypothesis(create_entities(({A, B}, {C, D}, {E, F}, {G, H})),
                       prefix="eqratio",
                       equal=equal_eight,
-                      valid=check([2, 2, 2, 2]),
+                      valid=valid_eight,
                       update_map=update_map_eight)
 
 
 def eqratio(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point, G: Point, H: Point):
-    return eqratio(A, B, C, D, E, F, G, H)
+    return equal_ratios(A, B, C, D, E, F, G, H)
+
+
+def equal_triangles(first, second) -> bool:
+    if first.prefix != second.prefix or first.value != second.value:
+        return False
+    a = first.ent_list()
+    b = second.ent_list()
+    for _ in range(2):
+        for i in range(3):
+            if (match_sets(a[0], b[i]) and match_sets(a[1], b[(1+i)%3]) and match_sets(a[2], b[(2+i)%3]) and
+                    match_sets(a[3], b[3+i]) and match_sets(a[4], b[3+((1+i)%3)]) and match_sets(a[5], b[3+((2+i)%3)])):
+                return True
+            if (match_sets(a[0], b[i]) and match_sets(a[2], b[(1+i)%3]) and match_sets(a[1], b[(2+i)%3]) and
+                    match_sets(a[3], b[3+i]) and match_sets(a[5], b[3+((1+i)%3)]) and match_sets(a[4], b[3+((2+i)%3)])):
+                return True
+        a, b = b, a # needed?
+    return False
+
+
+def valid_tri_pair(hypo):
+    if not check([1, 1, 1, 1, 1, 1])(hypo):
+        return False
+    a = hypo.ent_list()
+    b = a[0] | a[1] | a[2]
+    c = a[3] | a[4] | a[5]
+    return b != c and len(b) == 3 and len(c) == 3
 
 
 def similar_triangles(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
-    return Hypothesis(create_entities(({A, B, C}, {D, E, F})), prefix="simtri", equal=equal_pair, valid=check([3, 3]))
+    return Hypothesis(create_entities(({A}, {B}, {C}, {D}, {E}, {F})), prefix="simtri",
+                      equal=equal_triangles, valid=valid_tri_pair)
 
 
 def simtri(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
@@ -390,8 +453,21 @@ def simtri(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
 
 
 def congruent_triangles(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
-    return Hypothesis(create_entities(({A, B, C}, {D, E, F})), prefix="contri", equal=equal_pair, valid=check([3, 3]))
+    return Hypothesis(create_entities(({A}, {B}, {C}, {D}, {E}, {F})), prefix="contri",
+                      equal=equal_triangles, valid=valid_tri_pair)
 
 
 def contri(A: Point, B: Point, C: Point, D: Point, E: Point, F: Point):
     return congruent_triangles(A, B, C, D, E, F)
+
+
+def triangle(A: Point, B: Point, C: Point):
+    return Hypothesis(create_entities(({A, B, C},)), prefix="tri", valid=check([3]))
+
+
+def tri(A: Point, B: Point, C: Point):
+    return triangle(A, B, C)
+
+
+def unequal(A: Point, B: Point):
+    return Hypothesis(create_entities(({A, B},)), prefix="unequal", valid=check([2]))

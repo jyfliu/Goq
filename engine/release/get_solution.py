@@ -27,9 +27,12 @@ from logic import Theorem, Universe, Hypothesis, util
 # hypotheses are formatted as follows
 # prefix#point1#...#point_n#value (leave value string blank if no value exists, but do not forget the final #)
 
-with open(os.path.join(abs_path, sys.argv[1]), 'r') as f:
-    data = f.readlines()
-
+if len(sys.argv) > 1:
+    with open(os.path.join(abs_path, sys.argv[1]), 'r') as f:
+        data = f.readlines()
+else:
+    with open(os.path.join(abs_path, "temp.txt"), 'r') as f:
+        data = f.readlines()
 num_theorems = int(data[0])
 theorems = [x.split("#") for x in data[1:1+num_theorems]]
 num_goals = int(data[1+num_theorems])
@@ -50,9 +53,10 @@ for goal in parsed_goals:
 for constraint in parsed_constraints:
     universe.pose(constraint)
 
+universe.assert_points_unique()
 
 old_debug = util._debug
-util._debug = -1
+util._debug = 1
 universe.run_til_heat_death()
 
 with open(os.path.join(abs_path, "proof.txt"), "w") as sys.stdout:
@@ -60,3 +64,6 @@ with open(os.path.join(abs_path, "proof.txt"), "w") as sys.stdout:
         universe.knowledge.print_stack_trace(goal)
 
 util._debug = old_debug # not really necessary oh well
+
+# without get_map cache: 157.38 s
+# with get_map cache: 114.20 s
