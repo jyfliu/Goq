@@ -56,7 +56,7 @@ for constraint in parsed_constraints:
 universe.assert_points_unique()
 
 old_debug = util._debug
-util._debug = 1
+util._debug = -1
 universe.run_til_heat_death()
 
 with open(os.path.join(abs_path, "proof.txt"), "w") as sys.stdout:
