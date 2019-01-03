@@ -41,7 +41,12 @@ def test_update_map(test_id: int, verbose: bool=False):
         identity = Theorem.identity_point_map(6)
         source = Hypothesis.congruent_triangles(_A, B, C, _A, _E, _F)
         destination = Hypothesis.congruent_triangles(A, B, C, A, E, F)
-        num_sols = 2
+        num_sols = 1
+    elif test_id == 3:
+        identity = Theorem.identity_point_map(4)
+        source = Hypothesis.circle(_D, _B, _A, _C)
+        destination = Hypothesis.circle(D, C, B, A)
+        num_sols = 6
     else:
         return True
         # raise Exception("TEST %d NOT FOUND"%(test_id))

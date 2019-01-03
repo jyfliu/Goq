@@ -112,6 +112,8 @@ def check(lengths: List[int], unique=None) -> Callable[[Hypothesis], bool]:
     return ret
 
 
+map_cache = dict()
+
 # Given a map M and two hypotheses, source and destination (s and d for short) satisfying
 # d has only bound variables
 # s has a combination of bound and unbound variables
@@ -151,7 +153,17 @@ def update_map(cur_map: Dict[Point, Point], source: Hypothesis, destination: Hyp
     for x in b:
         for y in x:
             assert y.bound(), "Destination may only contain bound points"
-    return source.update_map(cur_map, source, destination)
+    cur_hash = ("".join(sorted(",".join((str(k), str(v))) for k, v in cur_map.items())), str(source), str(destination))
+    if cur_hash not in map_cache:
+        map_cache[cur_hash] = source.update_map(cur_map, source, destination)
+    # else:
+    #     what = source.update_map(cur_map, source, destination)
+    #     what = sorted(what, key=str)
+    #     map_cache[cur_hash] = sorted(map_cache[cur_hash], key=str)
+    #     if what != map_cache[cur_hash]:
+    #         print("NEW", "\n".join(str(x) for x in what), "OLD", "\n".join(str(x) for x in map_cache[cur_hash])
+    #               , source, destination, sep="\n")
+    return map_cache[cur_hash]
 
 
 # O((n permute k)^m) where k is size of each bucket, m is how many buckets there are, n is number of points in dest
@@ -188,7 +200,7 @@ def update_map_sep(cur_map: Dict[Point, Point], source: Hypothesis, destination:
         if temp_source != destination:
             continue
         maps += [merge_map]
-    if not maps and get_debug() == 1:
+    if not maps and get_debug() >= 2:
         print("Failed to create mapping", cur_map, source, destination, sep="\n")
     return [dict(t) for t in {tuple(d.items()) for d in maps}]
 
@@ -205,7 +217,7 @@ def update_map_bijection(cur_map: Dict[Point, Point], source: Hypothesis,
             maps += [m]
         except ValueError:
             pass
-    if not maps:
+    if not maps and get_debug() >= 2:
         print("Failed to create mapping ", cur_map, source, destination, sep="\n")
     return maps
 

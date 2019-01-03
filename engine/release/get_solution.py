@@ -56,7 +56,7 @@ for constraint in parsed_constraints:
 universe.assert_points_unique()
 
 old_debug = util._debug
-util._debug = 3
+util._debug = 1
 universe.run_til_heat_death()
 
 with open(os.path.join(abs_path, "proof.txt"), "w") as sys.stdout:
@@ -64,3 +64,6 @@ with open(os.path.join(abs_path, "proof.txt"), "w") as sys.stdout:
         universe.knowledge.print_stack_trace(goal)
 
 util._debug = old_debug # not really necessary oh well
+
+# without get_map cache: 157.38 s
+# with get_map cache: 114.20 s
