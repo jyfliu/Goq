@@ -124,3 +124,20 @@ class Universe(object):
             self.print_knowledge()
         if get_debug() >= 1:
             print("TIME ELAPSED:", time.time()-start_time)
+
+    def run_til_no_more_goals(self):
+        if get_debug() >= 1:
+            print("BEGINNING RUN")
+        start_time = time.time()
+        for _ in range(self.heat_death):
+            if get_debug() >= 2:
+                self.print_knowledge()
+            if get_debug() >= 1:
+                print("Step %d" % _)
+            self.step()
+            if not self.goals:
+                break
+        if get_debug() >= 2:
+            self.print_knowledge()
+        if get_debug() >= 1:
+            print("TIME ELAPSED:", time.time()-start_time)

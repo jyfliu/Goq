@@ -5,6 +5,9 @@ abs_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(os.path.abspath(os.path.join(abs_path, '..')))
 sys.path.append(os.path.abspath(os.path.join(abs_path, '..', 'logic')))
 
+_DEBUG = -1
+_FAST = True
+
 
 from logic import Theorem, Universe, Hypothesis, util
 
@@ -33,6 +36,7 @@ if len(sys.argv) > 1:
 else:
     with open(os.path.join(abs_path, "temp.txt"), 'r') as f:
         data = f.readlines()
+
 num_theorems = int(data[0])
 theorems = [x.split("#") for x in data[1:1+num_theorems]]
 num_goals = int(data[1+num_theorems])
@@ -56,8 +60,11 @@ for constraint in parsed_constraints:
 universe.assert_points_unique()
 
 old_debug = util._debug
-util._debug = -1
-universe.run_til_heat_death()
+util._debug = _DEBUG
+if _FAST:
+    universe.run_til_no_more_goals()
+else:
+    universe.run_til_heat_death()
 
 with open(os.path.join(abs_path, "proof.txt"), "w") as sys.stdout:
     for goal in parsed_goals:
