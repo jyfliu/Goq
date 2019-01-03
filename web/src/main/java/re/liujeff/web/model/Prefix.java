@@ -11,16 +11,23 @@ import javax.persistence.Id;
 @Data
 @Entity
 @NoArgsConstructor
-public class Proof {
+public class Prefix {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String proof;
+    private String prefix;
+    private String display;
 
-    public Proof(String proof) {
-        this.proof = proof;
+    public Prefix(String prefix) {
+        this.prefix = prefix;
+        this.display = prefix;
+    }
+
+    public Prefix(String prefix, String display) {
+        this.prefix = prefix;
+        this.display = display;
     }
 
 }
