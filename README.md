@@ -6,7 +6,7 @@ Goq is an automatic theorem prover capable of solving complex Olympiad style geo
 
 ## Inspiration
 
-Olympiad geometry is usually the most disliked discipline by high school students. And for good reason, too. Synthetic geometry requires an exceptional amount of preparation work, and more analytical "bash" techniques are frowned upon due to their ugly and time consuming nature.
+Olympiad geometry is a very polarizing math discipline -- high school students either love it or hate it. For some, the diagrams lead to easier visualization and thus facilitate abstract thinking right away. For others, myself included, geometry problems either require an exceptional amount of preparation work when done with a synthetic approach, and more analytical "bash" techniques are time consuming, low level, and frankly quite ugly.
 
 Enter the computer: an emotionless machine who excels at ugly and time consuming bashes, and who's databases can store (for our purposes) near limitless theorems and their applications.
 
