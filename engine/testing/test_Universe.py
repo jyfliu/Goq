@@ -1,5 +1,6 @@
-from logic import Theorem, Hypothesis, Point
+from logic import Theorem
 from logic.Universe import Universe
+from shared_logic import Hypothesis, Point
 
 
 def test_step():

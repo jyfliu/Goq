@@ -3,7 +3,7 @@ from typing import Dict, Tuple, Set
 
 from itertools import permutations
 
-from logic2.Point import Point
+from shared_logic.Point import Point
 
 
 class Entities(object):

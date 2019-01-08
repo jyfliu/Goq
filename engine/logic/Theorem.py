@@ -1,10 +1,11 @@
 from functools import reduce
-from itertools import product
 from typing import List, Dict, Tuple, Any, Set
 
-from logic import Hypothesis, Point
-from logic.Knowledge import left_implies
-from logic.util import merge
+from itertools import product
+
+from shared_logic import Hypothesis, Point
+from shared_logic.Knowledge import left_implies
+from shared_logic.util import merge
 
 
 class Theorem(object):

@@ -3,8 +3,9 @@ from collections import deque
 import itertools
 import time
 
-from logic2 import Knowledge, Theorem, Hypothesis
-from logic2.util import get_debug
+from logic2 import Theorem
+from shared_logic import Knowledge, Hypothesis
+from shared_logic.util import get_debug
 
 
 # I'd rather do something and regret it than regret doing nothing at all.
@@ -96,7 +97,7 @@ class Universe(object):
             self.knowledge.print_hypotheses()
 
     # run until it no longer runs
-    def run_til_heat_death(self) -> None:
+    def run_til_heat_death(self, fast=False, print_time=False) -> None:
         if get_debug() >= 1:
             print("BEGINNING RUN")
         start_time = time.time()
@@ -143,25 +144,18 @@ class Universe(object):
                             results += new_results
             self.derive_many(results)
             self.knowledge.insert(next_hypothesis, sources)
+            if next_hypothesis in self.goals:
+                self.print_solved_goals(next_hypothesis)
+                self.goals = [h for h in self.goals if h != next_hypothesis]
+                if fast and not self.goals:
+                    print("NO MORE GOALS")
+                    break
             self.in_queue.remove(next_hypothesis)
         if get_debug() >= 1:
             self.print_knowledge()
-        if get_debug() >= 1:
+        if get_debug() >= 1 or print_time:
             print("TIME ELAPSED:", time.time() - start_time)
 
-    def run_til_no_more_goals(self):
-        if get_debug() >= 1:
-            print("BEGINNING RUN")
-        start_time = time.time()
-        for _ in range(self.heat_death):
-            if get_debug() >= 2:
-                self.print_knowledge()
-            if get_debug() >= 1:
-                print("Step %d" % _)
-            self.step()
-            if not self.goals:
-                break
-        if get_debug() >= 2:
-            self.print_knowledge()
-        if get_debug() >= 1:
-            print("TIME ELAPSED:", time.time() - start_time)
+
+    def run(self, fast=False, print_time=False):
+        self.run_til_heat_death(fast=fast, print_time=print_time)

@@ -1,15 +1,21 @@
 from functools import reduce
 from typing import Dict, Any
 
-from logic2.Point import Point
+from shared_logic.Point import Point
 
 
 def merge_failed():
     return {"merge_failed": "fd8s9ah0qfixnb5809bfisj021z0oql012irxi02ihq"}
 
 
+merge_cache = dict()
+
+
 # prioritizes bound points, if both are unbound prioritizes the second, if both are bound throws exception
 def merge(first: Dict[Point, Point], second: Dict[Point, Point]) -> Dict[Any, Any]:
+    # cur_hash = (((k, v) for k, v in sorted(first.items(), key=str)), ((k, v) for k, v in sorted(second.items(), key=str)))
+    # if cur_hash in merge_cache:
+    #     return merge_cache[cur_hash]
     ret = {}
     for k, v in first.items():
         ret[k] = v
@@ -20,6 +26,7 @@ def merge(first: Dict[Point, Point], second: Dict[Point, Point]) -> Dict[Any, An
             # return merge_failed()
             raise ValueError("Merge failed")
     # print("merge", first, second, ret)
+    # merge_cache[cur_hash] = ret
     return ret
 
 

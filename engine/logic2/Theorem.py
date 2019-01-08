@@ -3,10 +3,10 @@ from typing import List, Dict, Tuple, Any, Set
 
 from itertools import product
 
-from logic2 import Hypothesis, Point
-from logic2.Hypothesis import update_map
-from logic2.Knowledge import left_implies
-from logic2.util import merge
+from shared_logic import Point, Hypothesis
+from shared_logic.Hypothesis import update_map
+from shared_logic.Knowledge import left_implies
+from shared_logic.util import merge
 
 
 class Theorem(object):

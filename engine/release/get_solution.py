@@ -5,11 +5,12 @@ abs_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(os.path.abspath(os.path.join(abs_path, '..')))
 sys.path.append(os.path.abspath(os.path.join(abs_path, '..', 'logic')))
 
-_DEBUG = 1
+_DEBUG = -1
 _FAST = False
 
 
-from logic2 import Theorem, Universe, Hypothesis, util
+from logic import Theorem, Universe
+from shared_logic import Hypothesis, util
 
 # parse input
 # this can definitely be done a lot cleaner lol
@@ -61,10 +62,7 @@ universe.assert_points_unique()
 
 old_debug = util._debug
 util._debug = _DEBUG
-if _FAST:
-    universe.run_til_no_more_goals()
-else:
-    universe.run_til_heat_death()
+universe.run(fast=_FAST, print_time=True)
 
 with open(os.path.join(abs_path, "proof.txt"), "w") as sys.stdout:
     for goal in parsed_goals:
@@ -74,3 +72,11 @@ util._debug = old_debug # not really necessary oh well
 
 # without get_map cache: 157.38 s
 # with get_map cache: 114.20 s
+
+# below numbers are rough and not in proper testing configs (ie. on battery saver power mode
+# data based 1st draft: 308s with debug = 1
+# same thing as above but with fast = True: 34.15s
+
+# Proper test benches: plugged in, max performance, data based: 291.41s
+# Same test conditions, preposition based: 114.32 (so its very damn close to before)
+# both found the same proof

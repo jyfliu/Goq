@@ -1,10 +1,11 @@
 from functools import reduce
-from itertools import permutations, product
 from typing import List, Callable, Dict, Set
 
-from logic.Entities import Entities, match_sets, create_entities
-from logic.Point import Point
-from logic.util import merge, get_debug
+from itertools import permutations, product
+
+from shared_logic.Entities import Entities, match_sets, create_entities
+from shared_logic.Point import Point
+from shared_logic.util import merge, get_debug
 
 
 class Hypothesis(object):
@@ -140,7 +141,11 @@ map_cache = dict()
 # given id[x], perp(_A, _B, Y, _C), perp(X, Y, X, Z)
 # {_A: X, _B: Z, _C: X} is a possible solution
 def update_map(cur_map: Dict[Point, Point], source: Hypothesis, destination: Hypothesis) -> List[Dict[Point, Point]]:
+    # print("map", cur_map, source, destination)
     assert source == destination, "Cannot map different hypotheses to each other"
+    source = source.bind(cur_map)
+    if not source == destination:
+        return []
     a = source.ent_list()
     b = destination.ent_list()
     ca = 0
@@ -194,7 +199,10 @@ def update_map_sep(cur_map: Dict[Point, Point], source: Hypothesis, destination:
         for r, c in zip(required_mappings, choice):
             for x, y in zip(r, c):
                 temp_map[x] = y
-        merge_map = merge(temp_map, cur_map)
+        try:
+            merge_map = merge(temp_map, cur_map)
+        except ValueError:
+            continue
         # print(" ".join(": ".join((m.name,n.name)) for m, n in merge_map.items()))
         temp_source = source.bind(merge_map)
         if temp_source != destination:
@@ -214,7 +222,8 @@ def update_map_bijection(cur_map: Dict[Point, Point], source: Hypothesis,
     for choice in product(*[get_map_sets(x, y) for x, y in zip(a, b)]):
         try:
             m = reduce(merge, [cur_map] + list(choice), {})
-            maps += [m]
+            if source.bind(m) == destination:
+                maps += [m]
         except ValueError:
             pass
     if not maps and get_debug() >= 2:

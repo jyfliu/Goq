@@ -1,7 +1,8 @@
 import time
 
-from logic import Knowledge, Theorem, Hypothesis
-from logic.util import get_debug
+from logic import Theorem
+from shared_logic import Knowledge, Hypothesis
+from shared_logic.util import get_debug
 
 
 # I'd rather do something and regret it than regret doing nothing at all.
@@ -106,7 +107,7 @@ class Universe(object):
         # ?????????????
 
     # run until it no longer runs
-    def run_til_heat_death(self) -> None:
+    def run_til_heat_death(self, print_time=False) -> None:
         if get_debug() >= 1:
             print("BEGINNING RUN")
         start_time = time.time()
@@ -122,10 +123,10 @@ class Universe(object):
                 break
         if get_debug() >= 2:
             self.print_knowledge()
-        if get_debug() >= 1:
+        if get_debug() >= 1 or print_time:
             print("TIME ELAPSED:", time.time()-start_time)
 
-    def run_til_no_more_goals(self):
+    def run_til_no_more_goals(self, print_time=False):
         if get_debug() >= 1:
             print("BEGINNING RUN")
         start_time = time.time()
@@ -139,5 +140,11 @@ class Universe(object):
                 break
         if get_debug() >= 2:
             self.print_knowledge()
-        if get_debug() >= 1:
+        if get_debug() >= 1 or print_time:
             print("TIME ELAPSED:", time.time()-start_time)
+
+    def run(self, fast=False, print_time=False):
+        if fast:
+            self.run_til_no_more_goals(print_time=print_time)
+        else:
+            self.run_til_heat_death(print_time=print_time)

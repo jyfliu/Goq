@@ -1,7 +1,7 @@
 from typing import Any, List, Dict
 
-from logic2 import Hypothesis
-from logic2.util import get_debug
+from shared_logic import Hypothesis
+from shared_logic.util import get_debug
 
 
 class Knowledge(object):
