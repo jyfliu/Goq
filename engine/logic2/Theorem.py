@@ -30,7 +30,7 @@ class Theorem(object):
         answers = []
         for cur_map in maps:
             answers += [(x, (" ".join((self.name, left_implies(), self.source)),)
-                         + tuple(bind(cur_map, self.hypotheses))) for x in bind(cur_map, self.results)]
+                         + tuple(bind(cur_map, self.hypotheses))) for x in bind(cur_map, self.results) if x.valid(x)]
         return answers
 
     def __str__(self) -> str:

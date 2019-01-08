@@ -9,7 +9,7 @@ _DEBUG = 2
 _FAST = False
 
 
-from logic import Theorem, Universe, Hypothesis, util
+from logic2 import Theorem, Universe, Hypothesis, util
 
 # parse input
 # this can definitely be done a lot cleaner lol
