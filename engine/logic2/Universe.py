@@ -14,6 +14,7 @@ class Universe(object):
         self.points = set()
         self.knowledge = Knowledge.Knowledge()
         self.to_be_added = deque()
+        self.in_queue = set()
         self.goals = []
         self.theorems = dict()
         self.last_theorem_application = dict()
@@ -62,11 +63,16 @@ class Universe(object):
             if get_debug() >= 1:
                 print("critical error, attempted to derive", hypothesis)
             return
-    #    self.knowledge.insert(hypothesis, sources)
-    #    if hypothesis in self.goals:
-    #        self.print_solved_goals(hypothesis)
-    #        self.goals = [h for h in self.goals if h != hypothesis]
+        #    self.knowledge.insert(hypothesis, sources)
+        #    if hypothesis in self.goals:
+        #        self.print_solved_goals(hypothesis)
+        #        self.goals = [h for h in self.goals if h != hypothesis]
+        if self.knowledge.contains(hypothesis):
+            return hypothesis
+        if hypothesis in self.in_queue:
+            return hypothesis
         self.to_be_added.append((hypothesis, sources))
+        self.in_queue.add(hypothesis)
         return hypothesis
 
     def derive_many(self, list_of_hypos):
@@ -78,7 +84,6 @@ class Universe(object):
             for q in self.points:
                 if p != q:
                     self.pose(Hypothesis.unequal(p, q))
-
 
     def print_solved_goals(self, hypothesis: Hypothesis) -> None:
         for goal in self.goals:
@@ -96,34 +101,53 @@ class Universe(object):
             print("BEGINNING RUN")
         start_time = time.time()
         for _ in range(self.heat_death):
+            assert _ == len(self.knowledge.hypotheses), "Each step should derive a new unique hypothesis"
             if not self.to_be_added:
                 break
             if get_debug() >= 2:
                 self.print_knowledge()
             if get_debug() >= 1:
-                print("Step %d" % _)
+                print("Step %d, at least %d more" % (_, len(self.in_queue)))
             next_hypothesis, sources = self.to_be_added.popleft()
             if get_debug() >= 1:
-                print("Considering hypothesis:", next_hypothesis)
+                print("Considering hypothesis:", next_hypothesis, "from", sources)
             results = []
             for theorem in self.theorems[next_hypothesis.prefix]:
                 if get_debug() >= 2:
                     print("Try apply theorem:", theorem)
                 for i, req_hypo in enumerate(theorem.hypotheses):
                     if req_hypo == next_hypothesis:
-                        other_hypos = theorem.hypotheses[:i]+theorem.hypotheses[i+1:]
+                        other_hypos = theorem.hypotheses[:i] + theorem.hypotheses[i + 1:]
                         all_other_hypos = []
+                        fail = False
                         for other_hypo in other_hypos:
-                            all_other_hypos.append(self.knowledge.get_all_of(other_hypo))
+                            matching_hypos = [x for x in self.knowledge.get_all_of(other_hypo) if x == other_hypo]
+                            if not matching_hypos:
+                                fail = True
+                                break
+                            all_other_hypos.append(matching_hypos)
+                        if fail:
+                            continue
                         for permutation in itertools.product(*all_other_hypos):
-                            parameters = permutation[:i]+(next_hypothesis,)+permutation[i:]
-                            results += theorem.apply(parameters)
+                            parameters = permutation[:i] + (next_hypothesis,) + permutation[i:]
+                            if len(set(parameters)) != len(parameters):
+                                continue
+                            if get_debug() >= 2:
+                                print("params:", parameters)
+                            new_results = theorem.apply(parameters)
+                            new_results = [x for x in new_results
+                                           if not self.knowledge.contains(x) and
+                                           x not in self.in_queue]
+                            if new_results and get_debug() >= 2:
+                                print("Successful derivation:", new_results, sep="\n")
+                            results += new_results
             self.derive_many(results)
             self.knowledge.insert(next_hypothesis, sources)
-        if get_debug() >= 2:
+            self.in_queue.remove(next_hypothesis)
+        if get_debug() >= 1:
             self.print_knowledge()
         if get_debug() >= 1:
-            print("TIME ELAPSED:", time.time()-start_time)
+            print("TIME ELAPSED:", time.time() - start_time)
 
     def run_til_no_more_goals(self):
         if get_debug() >= 1:
@@ -140,4 +164,4 @@ class Universe(object):
         if get_debug() >= 2:
             self.print_knowledge()
         if get_debug() >= 1:
-            print("TIME ELAPSED:", time.time()-start_time)
+            print("TIME ELAPSED:", time.time() - start_time)

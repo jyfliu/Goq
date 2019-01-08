@@ -141,6 +141,7 @@ map_cache = dict()
 # given id[x], perp(_A, _B, Y, _C), perp(X, Y, X, Z)
 # {_A: X, _B: Z, _C: X} is a possible solution
 def update_map(cur_map: Dict[Point, Point], source: Hypothesis, destination: Hypothesis) -> List[Dict[Point, Point]]:
+    # print("map", cur_map, source, destination)
     assert source == destination, "Cannot map different hypotheses to each other"
     source = source.bind(cur_map)
     a = source.ent_list()
@@ -151,7 +152,10 @@ def update_map(cur_map: Dict[Point, Point], source: Hypothesis, destination: Hyp
             if y.unbound():
                 ca += 1
     if not ca:
-        return [cur_map]
+        if source == destination:
+            return [cur_map]
+        else:
+            return []
     for x in b:
         for y in x:
             assert y.bound(), "Destination may only contain bound points"
@@ -219,7 +223,8 @@ def update_map_bijection(cur_map: Dict[Point, Point], source: Hypothesis,
     for choice in product(*[get_map_sets(x, y) for x, y in zip(a, b)]):
         try:
             m = reduce(merge, [cur_map] + list(choice), {})
-            maps += [m]
+            if source.bind(m) == destination:
+                maps += [m]
         except ValueError:
             pass
     if not maps and get_debug() >= 2:

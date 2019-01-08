@@ -19,6 +19,7 @@ def merge(first: Dict[Point, Point], second: Dict[Point, Point]) -> Dict[Any, An
         if k in ret and ret[k].bound() and v.bound() and ret[k] != v:
             # return merge_failed()
             raise ValueError("Merge failed")
+    # print("merge", first, second, ret)
     return ret
 
 

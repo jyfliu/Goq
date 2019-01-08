@@ -26,12 +26,14 @@ class Theorem(object):
             new_maps = []
             for cur_map in maps:
                 new_maps += update_map(cur_map, required, given)
+            if not new_maps:
+                return []
             maps = new_maps
         answers = []
         for cur_map in maps:
             answers += [(x, (" ".join((self.name, left_implies(), self.source)),)
                          + tuple(bind(cur_map, self.hypotheses))) for x in bind(cur_map, self.results) if x.valid(x)]
-        return answers
+        return list(set(answers))
 
     def __str__(self) -> str:
         return "".join((self.name, ": ", str(self.results), " <-| ", str(self.hypotheses)))
