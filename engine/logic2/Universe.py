@@ -1,9 +1,9 @@
-from collections import deque
-
 import itertools
 import time
+from collections import deque
 
 from logic2 import Theorem
+from logic2.EmptyFactChecker import is_not_empty
 from shared_logic import Knowledge, Hypothesis
 from shared_logic.util import get_debug
 
@@ -138,7 +138,8 @@ class Universe(object):
                             new_results = theorem.apply(parameters)
                             new_results = [x for x in new_results
                                            if not self.knowledge.contains(x) and
-                                           x not in self.in_queue]
+                                           x not in self.in_queue and
+                                           is_not_empty(self.knowledge, x)]
                             if new_results and get_debug() >= 2:
                                 print("Successful derivation:", new_results, sep="\n")
                             results += new_results
