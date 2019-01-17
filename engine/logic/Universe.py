@@ -2,6 +2,7 @@ import time
 
 from logic import Theorem
 from shared_logic import Knowledge, Hypothesis
+from shared_logic.EmptyFactChecker import is_not_empty
 from shared_logic.util import get_debug
 
 
@@ -55,6 +56,8 @@ class Universe(object):
             if get_debug() >= 1:
                 print("critical error, attempted to derive", hypothesis)
             return
+        if not is_not_empty(self.knowledge, hypothesis):
+            return hypothesis
         self.knowledge.insert(hypothesis, sources)
         if hypothesis in self.goals:
             self.print_solved_goals(hypothesis)
@@ -70,7 +73,6 @@ class Universe(object):
             for q in self.points:
                 if p != q:
                     self.pose(Hypothesis.unequal(p, q))
-
 
     def print_solved_goals(self, hypothesis: Hypothesis) -> None:
         for goal in self.goals:
@@ -99,7 +101,7 @@ class Universe(object):
             # update the previous call signature
             self.last_theorem_application[theorem] = [len(self.knowledge.get_all_of(x)) for x in theorem.hypotheses]
             if get_debug() >= 2:
-                print("returned: ",*[x[0] for x in returned])
+                print("returned: ", *[x[0] for x in returned])
             if get_debug() >= 2:
                 print("DONE")
         # add a construction database (somehow ??? )
@@ -124,7 +126,7 @@ class Universe(object):
         if get_debug() >= 2:
             self.print_knowledge()
         if get_debug() >= 1 or print_time:
-            print("TIME ELAPSED:", time.time()-start_time)
+            print("TIME ELAPSED:", time.time() - start_time)
 
     def run_til_no_more_goals(self, print_time=False):
         if get_debug() >= 1:
@@ -141,7 +143,7 @@ class Universe(object):
         if get_debug() >= 2:
             self.print_knowledge()
         if get_debug() >= 1 or print_time:
-            print("TIME ELAPSED:", time.time()-start_time)
+            print("TIME ELAPSED:", time.time() - start_time)
 
     def run(self, fast=False, print_time=False):
         if fast:

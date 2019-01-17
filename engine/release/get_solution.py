@@ -5,7 +5,7 @@ abs_path = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(os.path.abspath(os.path.join(abs_path, '..')))
 sys.path.append(os.path.abspath(os.path.join(abs_path, '..', 'logic')))
 
-_DEBUG = -1
+_DEBUG = 1
 _FAST = False
 
 
