@@ -24,7 +24,46 @@ There are some hurdles, however. Rigourously formalizing a geometry problem into
 
 ## How it works.
 
-To be written. Something about bidirectional dfs over a very large decision graph (slowly working towards a much more intelligent algorithm. Expect a paper to be written about this (?) !)
+To be written.
+
+Currently the high level algorithm looks something like this:
+
+Step 1: Pose an initial list of hypotheses into the hypothesis database.
+
+Step 2: Apply theorems until we reach a fixpoint (where no matter which theorem we attempt to apply, no more progress may be made).
+
+Step 3: Construct a template ("auxilary point") from the template database, eg. connect two lines, etc.
+
+Step 4: Repeat steps 2, 3 until the conclusion is reached.
+
+(In the future, use Wu's method and computational methods when this fails)
+
+(The current bottleneck is a poor choice of auxilary point in step 3)
+
+Let's run through some example problems to see how this works in practice.
+
+The Orthocenter Theorem: The three altitudes of a triangle are concurrent.
+
+Well, of course, the computer won't be able to understand this. We can rephrase it in the following manner.
+
+```
+Hypothesis:
+triangle(A, B, C)
+collinear(E, A, C)
+perpendicular(B, E, A, C)
+collinear(F, B, C)
+perpendicular(A, F, B, C)
+collinear(H, A, F)
+collinear(H, B, E)
+collinear(G, A, B)
+collinear(G, C, H)
+
+Goals:
+perp(C, G, A, B)
+```
+![][https://github.com/jyfliu/Goq/blob/master/resources/img1.PNG]
+
+The machine generated the following proof:
 
 ## How good is it?
 
@@ -53,3 +92,7 @@ I wanted to learn Spring.
 
 #### Why did you use Python instead of pure Java?
 I wanted to practice Python. Also eventually I'd like to integrate more modern AI techniques, which is most readily done in Python.
+
+## Sources
+
+Chou, S., & Gao, X. (2001). Automated Reasoning in Geometry. _Handbook of Automated Reasoning_, 707-749. doi:10.1016/b978-044450813-3/50013-8
