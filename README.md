@@ -61,7 +61,7 @@ collinear(G, C, H)
 Goals:
 perp(C, G, A, B)
 ```
-![][https://github.com/jyfliu/Goq/blob/master/resources/img1.PNG]
+![](https://github.com/jyfliu/Goq/blob/master/resources/img1.PNG)
 
 The machine generated the following proof:
 
