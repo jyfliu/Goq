@@ -63,7 +63,19 @@ perp(C, G, A, B)
 ```
 ![](https://github.com/jyfliu/Goq/blob/master/resources/img1.PNG)
 
-The machine generated the following proof:
+The machine generated the following proof (the transcription of the proof is still a heavy work in progress):
+
+```
+Since FH is perpendicular to FC and EH is perpendicular to EC, CFEH forms a cyclic quadrilateral.
+Since FB is perpendicular to FA and EB is perpendicular to EA, AFBE forms a cyclic quadrilateral.
+Since CFEH is cyclic and HF-HC and EF-EC intercept the same arc, angle HF-HC is equal to angle EF-EC.
+Since AFBE is cyclic and BF-BA and EF-EA intercept the same arc, angle BF-BA is equal to angle EF-EA.
+Since AHF is collinear and AEC is collinear and angle HF-HC is equal to angle EF-EC, angle AF-CH is equal to angle FE-AC.
+Since CBF is collinear and CEA is collinear and angle BF-BA is equal to angle EF-EA, angle BC-AB is equal to angle FE-AC.
+Since angle AF-CH is equal to angle FE-AC angle and angle BC-AB is equal to angle FE-AC and equality of angles is transitive, angle AF-CH is equal to angle BC-AB.
+Since BC is perpendicular to AF and GCH is collinear and angle BC-AF is equal to angle AB-CH, CG is perpendicular to AB.
+This completes the proof.
+```
 
 ## How good is it?
 
