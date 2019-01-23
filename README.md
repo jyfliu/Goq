@@ -1,7 +1,5 @@
 # Goq
 
-DEMO COMING SOON (sorry!)
-
 Goq is an automatic theorem prover capable of solving complex Olympiad style geometry problems. The solver itself was written in Python, while the interface/website was written in Java with the help of Spring Boot, Thymeleaf, HTML, etc. The theorem database uses Hibernate, MySQL, JPA.
 
 ## See it in action
@@ -9,6 +7,8 @@ Goq is an automatic theorem prover capable of solving complex Olympiad style geo
 A pretty front-end UI has not been implemented yet. In the meantime, if you load Goq as a Spring project (I'm using IntelliJ, I'm not sure how this would work with other IDEs), then I have a few demos loaded up in web/src/test/java/re/liujeff/web/GetSolutionTest.java. You can easily add your own in the same format.
 
 To completely avoid the front end and view the logic, the solver begins at engine/release/get_solution.py. You can edit the \_DEBUG flag to control how much output is printed (-1 = silence, 0 = quiet updates, 1 = debug mode, 2 = verbose debug). You can also change the \_FAST flag to enable some experimental speed increases. Fair warning: The current implementation of \_FAST makes the program nondeterministic, however, I've found that it still is able to reach the correct fixpoint most (nearly always) of the time. The performance increase is in the 10x order of magnitude. 
+
+Once I finish an acceptable front-end I'll host the engine on my website.
 
 ## Inspiration
 
