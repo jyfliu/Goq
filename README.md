@@ -1,4 +1,4 @@
-(Update: rewrite in scala + with multiprocessing is coming very soon)
+(Update: rewriting in Scala (tentatively...) and to produce output in Lean for automated proof verification, potentially looking at https://imo-grand-challenge.github.io/)
 
 # Goq
 
