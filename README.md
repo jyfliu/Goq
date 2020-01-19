@@ -1,4 +1,6 @@
-(Update: rewriting in Scala (tentatively...) and to produce output in Lean for automated proof verification, potentially looking at https://imo-grand-challenge.github.io/)
+(Update: rewriting in C++ and to produce output in Lean for automated proof verification, potentially looking at https://imo-grand-challenge.github.io/)
+
+Link to rewrite: https://github.com/jyfliu/surfing
 
 # Goq
 
@@ -10,7 +12,7 @@ A pretty front-end UI has not been implemented yet. In the meantime, if you load
 
 To completely avoid the front end and view the logic, the solver begins at engine/release/get_solution.py. You can edit the \_DEBUG flag to control how much output is printed (-1 = silence, 0 = quiet updates, 1 = debug mode, 2 = verbose debug). You can also change the \_FAST flag to enable some experimental speed increases. Fair warning: The current implementation of \_FAST makes the program nondeterministic, however, I've found that it still is able to reach the correct fixpoint most (nearly always) of the time. The performance increase is in the 10x order of magnitude. 
 
-Once I finish an acceptable front-end I'll host the engine on my website.
+I'm currently rewriting Goq in C++ so this stuff is slightly outdated.
 
 ## Inspiration
 
@@ -93,13 +95,13 @@ In theory, any problem solvable with synthetic techniques is solvable by Goq. Ho
 
 Yet.
 
-There are optimization techniques available for us. Chess engines have been using many of these techniques for decades (alpha-beta pruning, razoring), with newer and fancier techniques (deep learning) continuously being developed.
+Who knows, maybe I'll learn enough to eventually be able to figure out a deep learning/stats/something else solution.
 
 I'd only ever consider this project done if Goq consistently outperforms the top humans. And we are far from that.
 
 ## Future
 
-To be written. However, in my opinion, of the four big topics in Olympiad math, geometry is by far the easiest to solve automatically. The difficulty order probably looks something like: Geometry < Number Theory =? Algebra < Combinatorics.
+To be written. However, in my opinion, of the four big topics in Olympiad math, geometry is by far the easiest to solve automatically. The difficulty order probably looks something like: Geometry <<< Number Theory =? Algebra <<<<<<< Combinatorics.
 
 Symbolic math is also getting to the point where I'd consider it good enough to use in a proof software such as this one. This means that analytic techniques such as barycentric, complex, or (god forbid) coordinate geometry are directions for further work.
 
